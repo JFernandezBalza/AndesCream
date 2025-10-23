@@ -4,7 +4,7 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
-import { CATEGORIAS } from '@/data/categorias'; // Asegúrate que esta ruta sea correcta
+import { CATEGORIAS } from '@/data/categorias';
 import { Menu, X, ChevronDown } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import Image from 'next/image';
@@ -21,9 +21,7 @@ export default function Navbar({ isOverlay = false }: NavbarProps) {
   const pathname = usePathname();
   const isHomePage = pathname === '/';
 
-   const isHistoriaPage = pathname === '/historia';
-   const isContactoPage = pathname === '/contacto';
-   const shouldBeOverlayStyle = isOverlay || isHistoriaPage || isContactoPage;
+  const shouldBeOverlayStyle = true;
 
   const navItems = [
     { name: '¿Quienes somos?', href: '/historia' },
@@ -78,10 +76,9 @@ export default function Navbar({ isOverlay = false }: NavbarProps) {
     if (isOverlay) {
       const baseClass = 'rounded-lg bg-black/20 text-gray-200';
       return `font-medium transition duration-300 px-3 py-2 ${baseClass} hover:bg-black/30`;
-    }
-    else {
-      const baseClass = 'rounded-lg text-gray-100 bg-white/10';
-      return `font-medium transition duration-300 px-3 py-2 ${baseClass} hover:bg-white/20 flex items-center`;
+    } else {
+      const baseClass = 'rounded-lg text-gray-100 bg-black/30';
+      return `font-medium transition duration-300 px-3 py-2 ${baseClass} hover:bg-black/20 flex items-center`;
     }
   };
 
@@ -98,15 +95,15 @@ export default function Navbar({ isOverlay = false }: NavbarProps) {
             {(!shouldBeOverlayStyle || !isHomePage) && (
               <Link
                 href='/' // CAMBIOS AQUÍ: Se añade 'transform' y el efecto 'hover:scale-105' al Link.
-                className={`flex transition duration-300 transform hover:scale-110 w-55`}
+                className={`flex transition duration-300 transform hover:scale-95 w-65`}
               >
                                                                {' '}
                 <Image
                   src='/images/logocream.png'
                   alt='AndesCream Logo'
-                  width={200}
+                  width={150}
                   height={40} // Se ha corregido h-15 a h-10 ya que height es 40px (h-10 = 40px en Tailwind)
-                  className='block h-15 w-auto'
+                  className='block h-20 w-auto'
                 />
                                                            {' '}
               </Link>
@@ -173,52 +170,87 @@ export default function Navbar({ isOverlay = false }: NavbarProps) {
           </div>
 
           {/* BOTÓN HAMBURGUESA (Móvil) */}
-          {(!shouldBeOverlayStyle || !isHomePage) && (
-            <button
-              onClick={() => setIsOpen(!isOpen)}
-              className='md:hidden p-2 rounded-md text-gray-700 hover:bg-gray-100'
-              aria-label='Abrir menú de categorías'
-            >
-              {isOpen ? <X size={24} /> : <Menu size={24} />}
-            </button>
-          )}
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            className='md:hidden p-2 rounded-md text-gray-700 hover:bg-gray-100'
+            aria-label='Abrir menú de categorías'
+          >
+            {isOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
         </div>
       </div>
 
       {/* MENÚ MÓVIL/HAMBURGUESA (Pantallas pequeñas) */}
-      {/* Este bloque sigue funcionando para móvil, mostrando todas las categorías. */}
-      {isOpen && (!shouldBeOverlayStyle || !isHomePage) && (
+      {isOpen && (
         <div className='md:hidden bg-white shadow-lg pb-4 transition-all duration-300'>
-          <div className='flex flex-col space-y-2 px-4 pt-2'>
-            {/* Enlaces principales */}
-            {navItems.map((item) => (
-              <Link
-                key={item.name}
-                href={item.href}
-                onClick={() => setIsOpen(false)}
-                className={`text-gray-700 hover:bg-pink-50 p-2 rounded-md ${
-                  pathname === item.href ? 'bg-pink-100 font-semibold' : ''
-                }`}
-              >
-                {item.name}
-              </Link>
-            ))}
+          <div
+            className={`
+            md:hidden 
+            absolute top-20 left-0 w-full 
+            shadow-lg pb-4 transition-all duration-300
+            ${
+              shouldBeOverlayStyle
+                ? 'bg-gray-900/95 text-white'
+                : 'bg-white text-gray-800'
+            }
+          `}
+          >
+            <div className='flex flex-col space-y-2 px-4 pt-2'>
+              {/* Enlaces principales */}
+              {navItems.map((item) => (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  onClick={() => setIsOpen(false)}
+                  className={`p-3 rounded-md ${
+                    shouldBeOverlayStyle
+                      ? `text-white hover:bg-white/10 ${
+                          pathname === item.href
+                            ? 'bg-white/20 font-semibold'
+                            : ''
+                        }`
+                      : `text-gray-700 hover:bg-pink-50 ${
+                          pathname === item.href
+                            ? 'bg-pink-100 font-semibold'
+                            : ''
+                        }`
+                  }`}
+                >
+                  {item.name}
+                </Link>
+              ))}
 
-            <h4 className='font-bold text-gray-800 pt-4 pb-1 border-t mt-4'>
-              Categorías
-            </h4>
+              {/* ⭐ LÓGICA CLAVE: Mostrar Categorías SOLO si NO es la Home Page */}
+              {!isHomePage && (
+                <>
+                  <h4
+                    className={`font-bold pt-4 pb-1 border-t mt-4 ${
+                      shouldBeOverlayStyle
+                        ? 'text-white/80 border-gray-700'
+                        : 'text-gray-800 border-gray-200'
+                    }`}
+                  >
+                    Categorías
+                  </h4>
 
-            {/* Enlaces de Categorías */}
-            {CATEGORIAS.map((cat) => (
-              <Link
-                key={cat.slug}
-                href={`/menu/${cat.slug}`}
-                onClick={() => setIsOpen(false)}
-                className='text-sm text-gray-600 hover:bg-pink-50 p-2 rounded-md'
-              >
-                {cat.nombre}
-              </Link>
-            ))}
+                  {/* Enlaces de Categorías */}
+                  {CATEGORIAS.map((cat) => (
+                    <Link
+                      key={cat.slug}
+                      href={`/menu/${cat.slug}`}
+                      onClick={() => setIsOpen(false)}
+                      className={`text-sm p-3 rounded-md transition duration-150 ${
+                        shouldBeOverlayStyle
+                          ? 'text-gray-200 hover:bg-white/10'
+                          : 'text-gray-600 hover:bg-pink-50'
+                      }`}
+                    >
+                      {cat.nombre}
+                    </Link>
+                  ))}
+                </>
+              )}
+            </div>
           </div>
         </div>
       )}

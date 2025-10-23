@@ -12,7 +12,7 @@ interface FormData {
 
 const ContactoSection = () => {
   // Número de teléfono de destino para WhatsApp (ejemplo, debes cambiarlo)
-  const WHATSAPP_NUMBER = '5491100000000'; // Formato internacional: Código de país + Número
+  const WHATSAPP_NUMBER = '+34633017856'; // Formato internacional: Código de país + Número
 
   // 1. ESTADO PARA LOS CAMPOS DEL FORMULARIO
   const [formData, setFormData] = useState<FormData>({
@@ -133,10 +133,14 @@ const ContactoSection = () => {
     rowsCount = 6;
   }
 
+  const inputClass =
+    'mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-pink-500 focus:border-pink-500 placeholder-gray-500 text-pink-700 font-semibold text-base transition duration-200';
+  const textareaClass =
+    'mt-1 block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-pink-500 focus:border-pink-500 placeholder-gray-500 text-pink-700 font-semibold text-base transition duration-200';
   return (
-    <section className='py-16 px-4 bg-white min-h-[80vh]'>
-      <div className='max-w-xl mx-auto text-center'>
-        <h2 className='text-4xl font-extrabold text-pink-700 mb-4'>
+    <section className='py-16 px-4 bg-white min-h-full'>
+      <div className='max-w-xl mx-auto text-center mt-6'>
+        <h2 className='text-4xl font-extrabold text-pink-500 mb-4'>
           Contacto, Preguntas y Sugerencias
         </h2>
         <p className='text-xl text-gray-600 mb-10'>
@@ -160,7 +164,7 @@ const ContactoSection = () => {
 
         <form
           onSubmit={handleSubmit}
-          className='sugestion-form space-y-6 text-left'
+          className='sugestion-form space-y-6 text-left border-4 p-4'
         >
           {/* Nombre (Obligatorio) */}
           <div>
@@ -177,7 +181,8 @@ const ContactoSection = () => {
               required
               value={formData.name}
               onChange={handleChange}
-              className='mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-pink-500 focus:border-pink-500'
+              className={inputClass}
+              placeholder='Nombre completo'
             />
           </div>
 
@@ -197,7 +202,7 @@ const ContactoSection = () => {
               required
               value={formData.contactInfo}
               onChange={handleChange}
-              className='mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-pink-500 focus:border-pink-500'
+              className={inputClass}
               placeholder='Ej: 555-123-4567 o mi.correo@ejemplo.com'
             />
           </div>
@@ -216,7 +221,7 @@ const ContactoSection = () => {
               required
               value={formData.subject}
               onChange={handleChange}
-              className='mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-pink-500 focus:border-pink-500 appearance-none bg-white'
+              className={inputClass}
             >
               <option value='Pregunta/Contacto'>
                 Pregunta/Contacto (General)
@@ -244,8 +249,9 @@ const ContactoSection = () => {
               rows={rowsCount}
               required
               value={formData.sugestion}
-              onChange={handleChange as any}
-              className='mt-1 block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-pink-500 focus:border-pink-500'
+              onChange={handleChange}
+              className={textareaClass}
+              
             />
           </div>
 
