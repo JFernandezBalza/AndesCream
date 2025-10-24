@@ -3,7 +3,7 @@ const HistoriaSection = () => (
   // Sección principal de "Nosotros"
   <section
     id='nosotros'
-    className='w-full min-h-screen flex flex-col bg-cover bg-center bg-no-repeat relative'
+    className='w-full h-auto flex flex-col bg-cover bg-center bg-no-repeat relative'
     style={{ backgroundImage: `url('/images/fondo5.jpg')` }}
   >
     <div className='flex-grow flex items-center justify-center py-20 pb-4 md:py-0 md:pb-0 bg-black/15 z-0'>
