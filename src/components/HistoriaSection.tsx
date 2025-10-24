@@ -1,3 +1,4 @@
+
 const HistoriaSection = () => (
   // 1. CAMBIO AQUÍ: min-h-screen eliminado. h-auto y py-12 como fallback.
   <section
@@ -80,3 +81,4 @@ const HistoriaSection = () => (
      {' '}
   </section>
 );
+export default HistoriaSection;
