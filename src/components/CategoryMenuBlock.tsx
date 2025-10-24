@@ -19,7 +19,7 @@ export default function CategoryMenuBlock({
       <div className='max-w-7xl mx-auto px-4'>
         {/* Título solo si NO es un overlay, o dale estilo para el overlay */}
         {!isOverlay && (
-          <h2 className='text-3xl font-extrabold text-gray-900 sm:text-4xl mb-12'>
+          <h2 className='text-3xl font-serif text-gray-900 sm:text-4xl mb-12'>
             Descubre Nuestros Sabores
           </h2>
         )}
@@ -37,7 +37,7 @@ export default function CategoryMenuBlock({
             md:grid-cols-4 /* ESCRITORIO: 4 columnas */
             gap-4 md:gap-8 /* Espaciado entre elementos */
             max-w-sm mx-auto /* Limita el ancho en móvil y lo centra */
-            md:max-w-full md:mx-0 md:justify-end md:mr-10 /* Restaura el diseño de escritorio */
+            md:max-w-full md:mx-0 md:justify-end md:mr-2 /* Restaura el diseño de escritorio */
           '
           >
             {CATEGORIAS.map((categoria: Categoria) => (
@@ -63,7 +63,7 @@ export default function CategoryMenuBlock({
 
                 {/* Nombre de la Categoría */}
                 <span
-                  className={`text-sm sm:text-base font-semibold mt-2 ${
+                  className={`text-base sm:text-lg font-serif mt-2 ${
                     isOverlay
                       ? 'text-gray-900'
                       : 'text-gray-700 group-hover:text-pink-600'

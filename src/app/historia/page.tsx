@@ -8,8 +8,6 @@ export default function HistoriaPage() {
     <div className='min-h-screen flex flex-col'>
       <Navbar />
       <main
-        className='flex-grow'
-        style={{ backgroundImage: `url('/images/fondo5.jpg')` }}
       >
         <HistoriaSection />
       </main>

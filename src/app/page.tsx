@@ -19,12 +19,10 @@ const HeroSection = () => (
       </div>
 
       {/* 2. SECCIÓN CENTRAL: TÍTULO PRINCIPAL (Utiliza flex-grow para ocupar el espacio restante) */}
-      <div className='flex-grow flex items-center justify-center px-2 py-16'>
-        <div className='w-full max-w-xs md:max-w-lg'>
-          <div className='relative h-40 md:h-60 mx-auto'>
+      <div className='flex-grow flex items-center justify-center md:justify-end'>
+        <div className='w-full max-w-xs md:max-w-lg pt-17 mx-auto md:mr-65'>
+          <div className='relative h-40 md:h-80 mx-auto'>
             {' '}
-            {/* Añadimos w-full para que ocupe todo el ancho disponible dentro de max-w-xl */}{' '}
-            {/* Altura fija para la imagen, 'relative' para layout='fill' */}
             <Image
               src='/images/logocream.png' // <-- RUTA DE TU IMAGEN (¡Cámbiala!)
               alt='Helado artesanal sabor único'
@@ -36,18 +34,16 @@ const HeroSection = () => (
           </div>
         </div>
       </div>
-
-      {/* 3. SECCIÓN INFERIOR: MENÚ Y FOOTER (Se apilan en la parte inferior de la pantalla) */}
+      {/* 3. SECCIÓN INFERIOR: MENÚ*/}
       <div className='w-full'>
-        <div className='mb-8 mt-6'>
+        <div className='mb-8'>
           {/* Bloque de Menú de Categorías (Debe ser un overlay con gradiente para la transición visual) */}
           <CategoryMenuBlock isOverlay={true} />
         </div>
-<div>
-
-          {/* Footer (Debe tener un fondo sólido oscuro para asegurar legibilidad sobre la imagen) */}
+        <div>
+          {/* 4. SECCIÒN Footer (Debe tener un fondo sólido oscuro para asegurar legibilidad sobre la imagen) */}
           <Footer isOverlay={true} />
-</div>
+        </div>
       </div>
     </div>
   </section>

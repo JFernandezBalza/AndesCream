@@ -106,7 +106,7 @@ const Footer = ({ isOverlay = false }: FooterProps) => {
 
   return (
     <footer className={footerClasses}>
-      <div className='max-w-9xl mx-auto px-4 sm:px-6 bg-gradient-to-t from-black/40 to-transparent'>
+      <div className='max-w-9xl mx-auto px-4 sm:px-6 bg-gradient-to-t from-black/60 to-transparent'>
         {/*
           CONTENEDOR MODIFICADO:
           Ahora tiene tres columnas en desktop: Legal | Copyright | Social
