@@ -264,7 +264,7 @@ const ContactoSection = () => {
               <button
                 type='submit'
                 // CLASES MODIFICADAS: border-2, bg-white, text-rose-500
-                className='flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 pt-4
+                className='flex-1 flex items-center justify-center py-3 px-4
         border-2 border-rose-500 rounded-md shadow-sm text-lg font-sans 
         text-rose-500 bg-white 
         hover:bg-rose-50 
@@ -275,6 +275,7 @@ const ContactoSection = () => {
         focus:ring-offset-2 
         focus:ring-rose-500 
         transition duration-300'
+
                 title='Enviar el formulario a nuestro correo electrónico'
               >
                 {/* Ícono de Correo (stroke='currentColor' para coincidir con el texto) */}
