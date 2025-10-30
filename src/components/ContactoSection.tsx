@@ -139,11 +139,11 @@ const ContactoSection = () => {
     'mt-1 block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-pink-500 focus:border-pink-500 placeholder-gray-500 text-emerald-500 font-sans text-base transition duration-200';
   return (
     <section
-      className='w-full min-h-screen flex flex-col bg-cover bg-center bg-no-repeat relative '
+      className='w-full h-auto py-16 flex flex-col bg-cover bg-[position:40%_center] bg-no-repeat relative '
       style={{ backgroundImage: `url('/images/fondo5.jpg')` }}
     >
-      <div className='flex-grow flex items-center justify-center py-20 pb-4 md:py-0 md:pb-0 bg-black/15 z-0'>
-        <div className='max-w-x1 mx-auto text-center mt-20 '>
+      <div className='flex-grow flex items-center justify-center py-16 pb-16 bg-black/15 z-0'>
+        <div className='max-w-xl mx-auto text-center'>
           <h2 className='text-4xl font-serif text-gray-500 mb-0'>
             Contacto, Preguntas y Sugerencias
           </h2>
@@ -259,12 +259,12 @@ const ContactoSection = () => {
             </div>
 
             {/* ⭐ CONTENEDOR DE BOTONES (flex) */}
-            <div className='flex space-x-4 pt-4'>
+            <div className='flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 pt-4'>
               {/* Botón 1: Enviar por Correo/Sistema (Rosa Pastel) */}
               <button
                 type='submit'
                 // CLASES MODIFICADAS: border-2, bg-white, text-rose-500
-                className='flex-1 flex items-center justify-center py-3 px-4 
+                className='flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 pt-4
         border-2 border-rose-500 rounded-md shadow-sm text-lg font-sans 
         text-rose-500 bg-white 
         hover:bg-rose-50 
@@ -299,8 +299,7 @@ const ContactoSection = () => {
               <button
                 type='button' // Importante para que no intente enviar el formulario automáticamente
                 onClick={handleWhatsApp}
-                // CLASES MODIFICADAS: border-2, bg-white, text-emerald-400
-                className='flex-1 flex items-center justify-center py-3 px-4 border-2 border-emerald-500 rounded-md shadow-sm text-lg font-sans text-emerald-400 bg-white hover:bg-emerald-50 hover:border-emerald-500 hover:text-emerald-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-400 transition duration-300'
+                className='w-full sm:flex-1 flex items-center justify-center py-3 px-4 border-2 border-emerald-500 rounded-md shadow-sm text-lg font-sans text-emerald-400 bg-white hover:bg-emerald-50 hover:border-emerald-500 hover:text-emerald-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-400 transition duration-300'
                 title='Abrir WhatsApp con el mensaje preescrito'
               >
                 {/* Ícono de WhatsApp (fill='currentColor' para coincidir con el texto) */}
