@@ -5,7 +5,7 @@ import Image from 'next/image';
 
 const HeroSection = () => (
   <section
-    className='w-full min-h-screen flex flex-col bg-cover bg-left bg-no-repeat relative md:bg-center'
+    className='w-full min-h-screen flex flex-col bg-cover bg-[position:35%_center] bg-no-repeat relative md:bg-center'
     style={{ backgroundImage: `url('/images/fondo5.jpg')` }}
   >
     {/* ⭐ 0. OVERLAY OSCURO: Añadimos una capa semitransparente sobre la imagen para mejorar la legibilidad del texto blanco */}
