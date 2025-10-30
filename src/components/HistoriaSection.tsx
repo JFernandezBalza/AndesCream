@@ -3,10 +3,10 @@ const HistoriaSection = () => (
   // Sección principal de "Nosotros"
   <section
     id='nosotros'
-    className='w-full min-h-screen flex flex-col bg-cover bg-center bg-no-repeat relative'
+    className='w-full h-auto py-16 flex flex-col bg-cover bg-[position:35%_center] bg-no-repeat relative md:bg-center'
     style={{ backgroundImage: `url('/images/fondo5.jpg')` }}
   >
-    <div className='flex-grow flex items-center justify-center py-20 pb-4 md:py-0 md:pb-0 bg-black/15 z-0'>
+    <div className='flex-grow flex items-center justify-center py-16 pb-16 bg-black/15 z-0'>
       {/* Contenido de la Historia */}
       {/* Texto de la Historia (Columna Principal) */}
       {/* CAMBIO CLAVE: Cambiamos 'space-y-6' a 'space-y-3' para menor separación entre párrafos. */}
