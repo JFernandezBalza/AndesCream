@@ -143,7 +143,7 @@ const ContactoSection = () => {
       style={{ backgroundImage: `url('/images/fondo5.jpg')` }}
     >
       <div className='flex-grow flex items-center justify-center py-16 pb-16 bg-black/15 z-0'>
-        <div className='max-w-xl mx-auto text-center'>
+        <div className='max-w-xl mx-auto text-center px-4'>
           <h2 className='text-4xl font-serif text-gray-500 mb-0'>
             Contacto, Preguntas y Sugerencias
           </h2>
@@ -168,7 +168,7 @@ const ContactoSection = () => {
 
           <form
             onSubmit={handleSubmit}
-            className='sugestion-form space-y-6 text-left border-2 p-10 mb-4 bg-white/90'
+            className='sugestion-form space-y-6 text-left border-2 p-10 mb-4 bg-white/90 rounded-lg shadow-2xl'
           >
             {/* Nombre (Obligatorio) */}
             <div>
@@ -299,7 +299,7 @@ const ContactoSection = () => {
               <button
                 type='button' // Importante para que no intente enviar el formulario automáticamente
                 onClick={handleWhatsApp}
-                className='w-full sm:flex-1 flex items-center justify-center py-3 px-4 border-2 border-emerald-500 rounded-md shadow-sm text-lg font-sans text-emerald-400 bg-white hover:bg-emerald-50 hover:border-emerald-500 hover:text-emerald-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-400 transition duration-300'
+                className='flex-1 flex items-center justify-center py-3 px-4 border-2 border-emerald-500 rounded-md shadow-sm text-lg font-sans text-emerald-400 bg-white hover:bg-emerald-50 hover:border-emerald-500 hover:text-emerald-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-400 transition duration-300'
                 title='Abrir WhatsApp con el mensaje preescrito'
               >
                 {/* Ícono de WhatsApp (fill='currentColor' para coincidir con el texto) */}
