@@ -19,9 +19,9 @@ const HeroSection = () => (
       </div>
 
       {/* 2. SECCIÓN CENTRAL: TÍTULO PRINCIPAL (Utiliza flex-grow para ocupar el espacio restante) */}
-      <div className='flex-grow flex items-center justify-center md:justify-end'>
-        <div className='w-full max-w-xs md:max-w-lg pt-17 mx-auto md:mr-65'>
-          <div className='relative h-40 md:h-80 mx-auto'>
+      <div className='flex-grow flex items-center justify-center'>
+        <div className='w-full max-w-lg pt-17 mx-auto'>
+          <div className='relative h-80 mx-auto'>
             {' '}
             <Image
               src='/images/logocream.png' // <-- RUTA DE TU IMAGEN (¡Cámbiala!)
