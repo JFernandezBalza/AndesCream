@@ -1,23 +1,30 @@
-// components/Navbar.tsx
-
 'use client';
 
 import Link from 'next/link';
-import { useState, useRef } from 'react'; // Importamos 'useRef'
+import { useState, useRef } from 'react';
 import { CATEGORIAS } from '@/data/categorias';
-import { Menu, X, ChevronDown } from 'lucide-react';
+import { Menu, X, ChevronDown, LogOut, LayoutDashboard } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import Image from 'next/image';
 
 interface NavbarProps {
   isOverlay?: boolean;
+  // Prop para determinar si el usuario es administrador
+  isAdmin?: boolean;
+  // ⭐ NUEVO: Función de callback para el cierre de sesión
+  onLogoutClick?: () => void;
 }
 
-export default function Navbar({ isOverlay = false }: NavbarProps) {
+// Aseguramos que isAdmin y onLogoutClick tengan un valor por defecto
+export default function Navbar({
+  isOverlay = false,
+  isAdmin = false,
+  onLogoutClick, // Se acepta la nueva prop
+}: NavbarProps) {
   const [isOpen, setIsOpen] = useState(false); // Controla el menú móvil (hamburguesa)
-  // ⭐ ESTADO: Controla el dropdown de categorías en escritorio
+  // Controla el dropdown de categorías en escritorio
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  // ⭐ NUEVO: Referencia para el temporizador de cierre (debounce)
+  // Referencia para el temporizador de cierre (debounce)
   const closeTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   const pathname = usePathname();
@@ -25,15 +32,22 @@ export default function Navbar({ isOverlay = false }: NavbarProps) {
 
   const shouldBeOverlayStyle = true;
 
+  // Enlaces de navegación estándar
   const navItems = [
     { name: '¿Quienes somos?', href: '/historia' },
     { name: 'Contacto/Sugerencias', href: '/contacto' },
   ];
 
-  // --- NUEVAS FUNCIONES DE MANEJO DEL MOUSE ---
+  // Enlaces de administración. ⭐ DASHBOARD AÑADIDO
+  const adminNavItems = [
+    { name: 'Dashboard', href: '/admin', icon: LayoutDashboard }, // ⭐ NUEVO: Dashboard
+    { name: 'Productos (ABM)', href: '/admin/productos', icon: null },
+    { name: 'Órdenes (ABM)', href: '/admin/ordenes', icon: null },
+  ];
+
+  // --- Funciones de manejo del mouse para el Dropdown ---
 
   const handleMouseEnter = () => {
-    // Al entrar, limpiamos cualquier temporizador de cierre pendiente y abrimos el menú
     if (closeTimerRef.current) {
       clearTimeout(closeTimerRef.current);
       closeTimerRef.current = null;
@@ -42,8 +56,6 @@ export default function Navbar({ isOverlay = false }: NavbarProps) {
   };
 
   const handleMouseLeave = () => {
-    // Al salir, establecemos un temporizador para cerrar el menú después de 200ms.
-    // Esto es el 'debounce' que evita el cierre accidental.
     closeTimerRef.current = setTimeout(() => {
       setIsMenuOpen(false);
     }, 200); // 200ms de gracia
@@ -147,11 +159,36 @@ export default function Navbar({ isOverlay = false }: NavbarProps) {
               </Link>
             ))}
 
-            {/* ⭐ DROPDOWN DE CATEGORÍAS (Escritorio) */}
+            {/* ENLACES DE ADMIN (Escritorio) - Solo si isAdmin es true */}
+            {isAdmin &&
+              adminNavItems.map((item) => (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  className={getLinkClasses(item.href)}
+                >
+                  {item.name}
+                </Link>
+              ))}
+
+            {/* ⭐ NUEVO: BOTÓN CERRAR SESIÓN (ESCRITORIO) */}
+            {isAdmin && onLogoutClick && (
+              <button
+                onClick={onLogoutClick}
+                className={`${getLinkClasses(
+                  '/logout'
+                )} flex items-center bg-red-600/70 hover:bg-red-700/80 text-white`}
+                title='Cerrar Sesión'
+              >
+                <LogOut size={20} className='mr-1' />
+                Salir
+              </button>
+            )}
+
+            {/* DROPDOWN DE CATEGORÍAS (Escritorio) */}
             {(!isHomePage || !shouldBeOverlayStyle) && (
               <div
                 className='relative'
-                // ⭐ USAMOS LAS NUEVAS FUNCIONES CON DEBOUNCE
                 onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}
               >
@@ -190,7 +227,11 @@ export default function Navbar({ isOverlay = false }: NavbarProps) {
           {/* BOTÓN HAMBURGUESA (Móvil) */}
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className='md:hidden p-2 rounded-md text-gray-700 hover:bg-gray-100'
+            className={`md:hidden p-2 rounded-md ${
+              shouldBeOverlayStyle
+                ? 'text-white hover:bg-white/10'
+                : 'text-gray-700 hover:bg-gray-100'
+            }`}
             aria-label='Abrir menú de categorías'
           >
             {isOpen ? <X size={24} /> : <Menu size={24} />}
@@ -214,7 +255,7 @@ export default function Navbar({ isOverlay = false }: NavbarProps) {
             `}
           >
             <div className='flex flex-col space-y-2 px-4 pt-2'>
-              {/* Enlaces principales */}
+              {/* Enlaces principales (Historia y Contacto) */}
               {navItems.map((item) => (
                 <Link
                   key={item.name}
@@ -238,8 +279,70 @@ export default function Navbar({ isOverlay = false }: NavbarProps) {
                 </Link>
               ))}
 
-              {/* ⭐ Categorías Móvil */}
-              {!isHomePage && (
+              {/* ENLACES DE ADMIN (Móvil) - Solo si isAdmin es true */}
+              {isAdmin && (
+                <>
+                  <h4
+                    className={`font-bold pt-4 pb-1 border-t mt-4 ${
+                      shouldBeOverlayStyle
+                        ? 'text-pink-300 border-gray-700'
+                        : 'text-pink-600 border-gray-200'
+                    }`}
+                  >
+                    Administración
+                  </h4>
+                  {adminNavItems.map((item) => (
+                    <Link
+                      key={item.name}
+                      href={item.href}
+                      onClick={() => setIsOpen(false)}
+                      className={`p-3 rounded-md transition duration-150 flex items-center ${
+                        shouldBeOverlayStyle
+                          ? `text-white hover:bg-white/10 ${
+                              pathname === item.href
+                                ? 'bg-white/20 font-semibold'
+                                : ''
+                            }`
+                          : `text-gray-700 hover:bg-pink-50 ${
+                              pathname === item.href
+                                ? 'bg-pink-100 font-semibold'
+                                : ''
+                            }`
+                      }`}
+                    >
+                      {item.icon && <item.icon size={20} className='mr-2' />}
+                      {item.name}
+                    </Link>
+                  ))}
+                </>
+              )}
+
+              {/* ⭐ NUEVO: BOTÓN CERRAR SESIÓN (MÓVIL) */}
+              {isAdmin && onLogoutClick && (
+                <button
+                  onClick={() => {
+                    onLogoutClick();
+                    setIsOpen(false);
+                  }}
+                  className={`
+                      p-3 rounded-md mt-4 transition duration-150 
+                      flex items-center justify-center space-x-2 
+                      font-bold 
+                      ${
+                        shouldBeOverlayStyle
+                          ? 'bg-red-700 hover:bg-red-600 text-white'
+                          : 'bg-red-500 hover:bg-red-600 text-white'
+                      }
+                    `}
+                  title='Cerrar Sesión'
+                >
+                  <LogOut size={20} />
+                  <span>Cerrar Sesión</span>
+                </button>
+              )}
+
+              {/* Categorías Móvil */}
+              {(!isHomePage || isAdmin) && (
                 <>
                   <h4
                     className={`font-bold pt-4 pb-1 border-t mt-4 ${
