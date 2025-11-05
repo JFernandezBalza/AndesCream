@@ -1,10 +1,12 @@
-// app/admin/page.tsx
-
 'use client';
 
+import { useEffect, useState, useCallback } from 'react';
+import { useRouter } from 'next/navigation';
+// Se asume que este componente existe y está en '@/components/Navbar'
 import Navbar from '@/components/Navbar';
 import Link from 'next/link';
-// Importamos los nuevos iconos necesarios
+
+// Importamos los iconos de lucide-react para las tarjetas y la carga
 import {
   Settings,
   Users,
@@ -14,39 +16,131 @@ import {
   BarChart2,
   Palette,
   LucideIcon,
+  LayoutDashboard,
 } from 'lucide-react';
 
 // --- DEFINICIÓN DE TIPOS ---
+type ActionCardColor =
+  | 'pink'
+  | 'blue'
+  | 'green'
+  | 'gray'
+  | 'yellow'
+  | 'red'
+  | 'indigo';
+
 interface ActionCardProps {
   icon: LucideIcon;
   title: string;
-  href: string;
-  // Aceptamos más colores para diferenciar los módulos
-  color: 'pink' | 'blue' | 'green' | 'gray' | 'yellow' | 'red' | 'indigo';
+  // Propiedad para la URL de navegación
+  href?: string;
+  // Propiedad para la función de click (usada en Cerrar Sesión)
+  onClick?: () => void;
+  color: ActionCardColor;
 }
 // ----------------------------
 
-export default function AdminPage() {
-  const backgroundImage = '/images/fondo5.jpg';
+// Definiciones de clases reutilizables de Tailwind
+const adminClasses = {
+  // Clase base para todas las tarjetas con efecto hover y borde de color
+  cardClass: (color: ActionCardColor) =>
+    `bg-white/90 p-6 rounded-lg shadow-xl text-center transform hover:scale-[1.03] transition duration-300 border-b-4 border-${color}-500`,
+  // Clase para el icono en la tarjeta
+  iconClass: (color: ActionCardColor) =>
+    `w-10 h-10 mx-auto mb-3 text-${color}-600`,
+};
 
-  // Componente de Tarjeta de Acción tipado
-  const ActionCard: React.FC<ActionCardProps> = ({
-    icon: Icon,
-    title,
-    href,
-    color,
-  }) => (
-    <Link
-      href={href}
-      className={`bg-white/90 p-6 rounded-lg shadow-xl text-center transform hover:scale-[1.03] transition duration-300 border-b-4 border-${color}-500`}
-    >
-      <Icon className={`w-10 h-10 mx-auto mb-3 text-${color}-600`} />
+// Componente de Tarjeta de Acción tipado (funciona como Link o Button)
+const ActionCard: React.FC<ActionCardProps> = ({
+  icon: Icon,
+  title,
+  href,
+  onClick,
+  color,
+}) => {
+  const content = (
+    <>
+      <Icon className={adminClasses.iconClass(color)} />
       <h3 className='text-xl font-bold text-gray-800'>{title}</h3>
-    </Link>
+    </>
   );
 
+  const cardClasses = adminClasses.cardClass(color);
+
+  // Si tiene href, renderiza como Link
+  if (href) {
+    return (
+      <Link href={href} className={cardClasses}>
+        {content}
+      </Link>
+    );
+  }
+
+  // Si tiene onClick, renderiza como Button (para el logout)
+  if (onClick) {
+    return (
+      // Aseguramos que el botón tome el ancho completo de la celda
+      <button onClick={onClick} className={cardClasses + ' w-full'}>
+        {content}
+      </button>
+    );
+  }
+
+  return <div className={cardClasses}>{content}</div>; // Fallback por si acaso
+};
+
+export default function AdminPage() {
+  const router = useRouter();
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const backgroundImage = '/images/fondo5.jpg';
+
+  // --- LÓGICA DE CIERRE DE SESIÓN ---
+  const handleLogout = useCallback(() => {
+    // 1. Limpia el indicador de sesión de localStorage
+    localStorage.removeItem('is_admin_authenticated');
+    console.log('Sesión de administrador cerrada. Redirigiendo...');
+    // 2. Redirige al login.
+    setTimeout(() => {
+      router.push('/login');
+    }, 100);
+  }, [router]);
+
+  // --- LÓGICA DE PROTECCIÓN DE RUTA (GUARDIA) ---
+  useEffect(() => {
+    // Lee el indicador de autenticación. (Requiere que /login lo establezca)
+    const adminFlag = localStorage.getItem('is_admin_authenticated');
+
+    if (adminFlag === 'true') {
+      setIsAuthenticated(true);
+    } else {
+      // Redirigimos si no está autenticado
+      console.warn('Acceso denegado. Redirigiendo a /login.');
+      setTimeout(() => {
+        router.push('/login');
+      }, 50);
+    }
+    // Finalizamos la carga
+    setIsLoading(false);
+  }, [router]);
+
+  // 1. Mostrar pantalla de carga/verificación
+  if (isLoading || !isAuthenticated) {
+    return (
+      <div className='min-h-screen flex flex-col items-center justify-center bg-gray-100 p-8'>
+        <div className='animate-spin rounded-full h-12 w-12 border-b-4 border-pink-500 mb-4'></div>
+        <p className='text-xl text-gray-700 font-serif flex items-center'>
+          <LayoutDashboard className='w-5 h-5 mr-2' />
+          Verificando acceso al panel...
+        </p>
+      </div>
+    );
+  }
+
+  // 2. Mostrar Dashboard si está autenticado
   return (
     <div className='min-h-screen'>
+      {/* El Navbar necesita ser capaz de manejar la prop isOverlay */}
       <Navbar isOverlay={false} />
 
       <section
@@ -66,9 +160,9 @@ export default function AdminPage() {
                 tarea para comenzar.
               </p>
 
-              {/* Grid de Herramientas del Administrador (5 Módulos + Usuarios + Salir) */}
+              {/* Grid de Herramientas del Administrador (7 Módulos) */}
               <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pt-4'>
-                {/* 1. Gestión de Menús (Requisito 1) */}
+                {/* 1. Gestión de Menús */}
                 <ActionCard
                   icon={Settings}
                   title='Gestión de Menús (Precios y Fotos)'
@@ -76,7 +170,7 @@ export default function AdminPage() {
                   color='pink'
                 />
 
-                {/* 2. Análisis y Estadísticas (Requisito 2) */}
+                {/* 2. Análisis y Estadísticas */}
                 <ActionCard
                   icon={BarChart2}
                   title='Análisis y Estadísticas'
@@ -84,7 +178,7 @@ export default function AdminPage() {
                   color='indigo'
                 />
 
-                {/* 3. Apariencia y Fondos (Requisito 3) */}
+                {/* 3. Apariencia y Fondos */}
                 <ActionCard
                   icon={Palette}
                   title='Apariencia y Fondos'
@@ -92,7 +186,7 @@ export default function AdminPage() {
                   color='yellow'
                 />
 
-                {/* 4. Tareas Administrativas (Requisito 4) */}
+                {/* 4. Tareas Administrativas */}
                 <ActionCard
                   icon={Briefcase}
                   title='Tareas Administrativas'
@@ -100,7 +194,7 @@ export default function AdminPage() {
                   color='blue'
                 />
 
-                {/* 5. Inventario y Stock (Requisito 5) */}
+                {/* 5. Inventario y Stock */}
                 <ActionCard
                   icon={Package}
                   title='Inventario y Stock'
@@ -108,7 +202,7 @@ export default function AdminPage() {
                   color='green'
                 />
 
-                {/* 6. Gestión de Usuarios (Mantenido) */}
+                {/* 6. Gestión de Usuarios */}
                 <ActionCard
                   icon={Users}
                   title='Ver Usuarios'
@@ -116,11 +210,11 @@ export default function AdminPage() {
                   color='gray'
                 />
 
-                {/* 7. Cerrar Sesión (Mantenido) */}
+                {/* 7. Cerrar Sesión (Usa onClick para la función de logout) */}
                 <ActionCard
                   icon={LogOut}
                   title='Cerrar Sesión'
-                  href='/api/auth/logout'
+                  onClick={handleLogout}
                   color='red'
                 />
               </div>

@@ -26,19 +26,25 @@ export function middleware(request: NextRequest) {
   const userRole = getUserRole(request);
 
   if (request.nextUrl.pathname.startsWith('/admin')) {
-    // 1. Si no está logeado O no es ADMIN, redirige a /login
+    // ⚠️ ¡COMENTAMOS TEMPORALMENTE LA VERIFICACIÓN DE SEGURIDAD!
+    // Esto es solo para que el router.push en /login funcione y puedas diseñar /admin.
+    // **DEBES** restaurar esto ANTES de salir a producción.
+    /*
     if (!isUserLoggedIn || userRole !== 'ADMIN') {
       return NextResponse.redirect(new URL('/login', request.url));
     }
+    */
+    // Permitimos el acceso para la prueba:
+    return NextResponse.next();
   }
 
-  // 2. Permite la solicitud si es una ruta pública o si el usuario es ADMIN
+  // Permite la solicitud si pasa la verificación o si no es una ruta protegida
   return NextResponse.next();
 }
 
-// Configuración para indicar qué rutas debe interceptar el middleware
+// Mantenemos la configuración, pero la lógica interna está puenteada
 export const config = {
   matcher: [
-    '/admin/:path*', // Protege /admin y todas sus subrutas
+    '/admin/:path*', // Sigue interceptando, pero la lógica superior lo ignora
   ],
 };

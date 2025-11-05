@@ -1,6 +1,6 @@
 'use client';
 
-import { FormEvent, useState } from 'react';
+import { FormEvent, useState } from 'react'; 
 import Navbar from '@/components/Navbar';
 import Link from 'next/link';
 import { LogIn } from 'lucide-react';
@@ -24,32 +24,26 @@ export default function LoginPage() {
     setError(''); // Limpiamos errores previos
 
     // --- ⭐ LOGS DE DEBUGGING PARA VERIFICAR LA ENTRADA ---
-    console.log('Intento de Login detectado.');
+    console.log("Intento de Login detectado.");
     console.log(`Email ingresado: "${email}"`);
-    console.log(
-      `Password ingresada: "${password.replace(/./g, '*')}" (Solo caracteres)`
-    );
+    console.log(`Password ingresada: "${password.replace(/./g, '*')}" (Solo caracteres)`);
     console.log(`Credenciales esperadas: ${ADMIN_EMAIL} / ${ADMIN_PASSWORD}`);
     // ----------------------------------------------------
 
     // 1. Verificación de credenciales simulada
     if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
       // 2. Si las credenciales son correctas (Simulación de éxito):
-
+      
       // Esto simula la persistencia de la sesión de administrador.
       localStorage.setItem('is_admin_authenticated', 'true');
-
-      console.log(
-        '✅ ÉXITO: Inicio de sesión correcto. Iniciando redirección a /admin...'
-      );
+      
+      console.log('✅ ÉXITO: Inicio de sesión correcto. Iniciando redirección a /admin...');
 
       // **La redirección clave:**
       router.push('/admin'); // Redirige al panel de administración
     } else {
       // 3. Si las credenciales fallan:
-      console.error(
-        '❌ FALLO: Credenciales incorrectas. (Verifique mayúsculas/minúsculas o espacios)'
-      );
+      console.error('❌ FALLO: Credenciales incorrectas. (Verifique mayúsculas/minúsculas o espacios)');
       setError('Credenciales incorrectas. Intenta de nuevo.');
     }
   };
