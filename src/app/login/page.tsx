@@ -7,8 +7,8 @@ import { LogIn } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 // Definimos las credenciales de administrador DENTRO DEL CÓDIGO (Solo para TESTING)
-const ADMIN_EMAIL = 'admin@andesscream.com';
-const ADMIN_PASSWORD = 'superpassword'; // ¡No usar en producción!
+const ADMIN_EMAIL = 'andescream';
+const ADMIN_PASSWORD = 'valentina123'; // ¡No usar en producción!
 
 export default function LoginPage() {
   const router = useRouter();
