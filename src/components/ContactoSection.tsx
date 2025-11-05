@@ -143,7 +143,7 @@ const ContactoSection = () => {
       style={{ backgroundImage: `url('/images/fondo5.jpg')` }}
     >
       <div className='flex-grow flex items-center justify-center py-16 pb-16 bg-black/15 z-0'>
-        <div className='max-w-xl mx-auto text-center px-4'>
+        <div className='max-w-3xl mx-auto text-center px-4'>
           <h2 className='text-4xl font-serif text-gray-500 mb-0'>
             Contacto, Preguntas y Sugerencias
           </h2>

@@ -3,7 +3,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useState } from 'react';
+import { useState, useRef } from 'react'; // Importamos 'useRef'
 import { CATEGORIAS } from '@/data/categorias';
 import { Menu, X, ChevronDown } from 'lucide-react';
 import { usePathname } from 'next/navigation';
@@ -15,8 +15,10 @@ interface NavbarProps {
 
 export default function Navbar({ isOverlay = false }: NavbarProps) {
   const [isOpen, setIsOpen] = useState(false); // Controla el menú móvil (hamburguesa)
-  // ⭐ NUEVO ESTADO: Controla el dropdown de categorías en escritorio
+  // ⭐ ESTADO: Controla el dropdown de categorías en escritorio
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  // ⭐ NUEVO: Referencia para el temporizador de cierre (debounce)
+  const closeTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   const pathname = usePathname();
   const isHomePage = pathname === '/';
@@ -28,7 +30,26 @@ export default function Navbar({ isOverlay = false }: NavbarProps) {
     { name: 'Contacto/Sugerencias', href: '/contacto' },
   ];
 
-  // --- Lógica de Estilos ---
+  // --- NUEVAS FUNCIONES DE MANEJO DEL MOUSE ---
+
+  const handleMouseEnter = () => {
+    // Al entrar, limpiamos cualquier temporizador de cierre pendiente y abrimos el menú
+    if (closeTimerRef.current) {
+      clearTimeout(closeTimerRef.current);
+      closeTimerRef.current = null;
+    }
+    setIsMenuOpen(true);
+  };
+
+  const handleMouseLeave = () => {
+    // Al salir, establecemos un temporizador para cerrar el menú después de 200ms.
+    // Esto es el 'debounce' que evita el cierre accidental.
+    closeTimerRef.current = setTimeout(() => {
+      setIsMenuOpen(false);
+    }, 200); // 200ms de gracia
+  };
+
+  // --- Lógica de Estilos (sin cambios) ---
 
   // 1. Fondo de la barra completa: Transparente si es overlay, blanco con sombra si no.
   const bgClass = shouldBeOverlayStyle
@@ -94,18 +115,17 @@ export default function Navbar({ isOverlay = false }: NavbarProps) {
           >
             {(!shouldBeOverlayStyle || !isHomePage) && (
               <Link
-                href='/' // CAMBIOS AQUÍ: Se añade 'transform' y el efecto 'hover:scale-105' al Link.
+                href='/'
                 className={`flex transition duration-300 transform hover:scale-95 w-65`}
               >
-                                                               {' '}
+                {' '}
                 <Image
                   src='/images/logocream.png'
                   alt='AndesCream Logo'
                   width={150}
-                  height={40} // Se ha corregido h-15 a h-10 ya que height es 40px (h-10 = 40px en Tailwind)
+                  height={40}
                   className='block h-20 w-auto'
-                />
-                                                           {' '}
+                />{' '}
               </Link>
             )}
           </div>
@@ -113,7 +133,7 @@ export default function Navbar({ isOverlay = false }: NavbarProps) {
           {/* ITEMS DE NAVEGACIÓN (Pantallas Grandes) */}
           <div
             className={`hidden md:flex space-x-4 items-center ${
-              isHomePage && shouldBeOverlayStyle ? 'ml-auto' : '' // Empuja los botones a la derecha si el logo está oculto
+              isHomePage && shouldBeOverlayStyle ? 'ml-auto' : ''
             }`}
           >
             {/* Enlaces Historia y Contacto */}
@@ -127,12 +147,13 @@ export default function Navbar({ isOverlay = false }: NavbarProps) {
               </Link>
             ))}
 
-            {/* ⭐ IMPLEMENTACIÓN DEL DROPDOWN DE CATEGORÍAS (Escritorio) */}
+            {/* ⭐ DROPDOWN DE CATEGORÍAS (Escritorio) */}
             {(!isHomePage || !shouldBeOverlayStyle) && (
               <div
                 className='relative'
-                onMouseEnter={() => setIsMenuOpen(true)}
-                onMouseLeave={() => setIsMenuOpen(false)}
+                // ⭐ USAMOS LAS NUEVAS FUNCIONES CON DEBOUNCE
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
               >
                 <button
                   onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -149,10 +170,7 @@ export default function Navbar({ isOverlay = false }: NavbarProps) {
 
                 {/* Contenedor del Dropdown */}
                 {isMenuOpen && (
-                  <div
-                    className='absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 ring-1 ring-black ring-opacity-5 z-50'
-                    onMouseLeave={() => setIsMenuOpen(false)} // Ocultar al salir
-                  >
+                  <div className='absolute right-0 mt-2 w-56 bg-white rounded-md shadow-lg py-1 ring-1 ring-black ring-opacity-5 z-50'>
                     {CATEGORIAS.map((cat) => (
                       <Link
                         key={cat.slug}
@@ -185,15 +203,15 @@ export default function Navbar({ isOverlay = false }: NavbarProps) {
         <div className='md:hidden bg-white shadow-lg pb-4 transition-all duration-300'>
           <div
             className={`
-            md:hidden 
-            absolute top-20 left-0 w-full 
-            shadow-lg pb-4 transition-all duration-300
-            ${
-              shouldBeOverlayStyle
-                ? 'bg-gray-900/95 text-white'
-                : 'bg-white text-gray-800'
-            }
-          `}
+              md:hidden 
+              absolute top-20 left-0 w-full 
+              shadow-lg pb-4 transition-all duration-300
+              ${
+                shouldBeOverlayStyle
+                  ? 'bg-gray-900/95 text-white'
+                  : 'bg-white text-gray-800'
+              }
+            `}
           >
             <div className='flex flex-col space-y-2 px-4 pt-2'>
               {/* Enlaces principales */}
@@ -220,7 +238,7 @@ export default function Navbar({ isOverlay = false }: NavbarProps) {
                 </Link>
               ))}
 
-              {/* ⭐ LÓGICA CLAVE: Mostrar Categorías SOLO si NO es la Home Page */}
+              {/* ⭐ Categorías Móvil */}
               {!isHomePage && (
                 <>
                   <h4
