@@ -6,9 +6,9 @@ import Link from 'next/link';
 import { LogIn } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
-// Definimos las credenciales de administrador DENTRO DEL CÓDIGO (Solo para TESTING)
+// ¡No usar en producción! Credenciales hardcodeadas para simulación
 const ADMIN_EMAIL = 'andescream';
-const ADMIN_PASSWORD = 'valentina123'; // ¡No usar en producción!
+const ADMIN_PASSWORD = 'valentina123'; 
 
 export default function LoginPage() {
   const router = useRouter();
@@ -28,7 +28,6 @@ export default function LoginPage() {
     console.log(`Email ingresado: "${email}"`);
     console.log(`Password ingresada: "${password.replace(/./g, '*')}" (Solo caracteres)`);
     console.log(`Credenciales esperadas: ${ADMIN_EMAIL} / ${ADMIN_PASSWORD}`);
-    // ----------------------------------------------------
 
     // 1. Verificación de credenciales simulada
     if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
@@ -119,7 +118,7 @@ export default function LoginPage() {
                     type='submit'
                     className='w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-pink-600 hover:bg-pink-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500 transition duration-150'
                   >
-                    Acceder al Dashboard
+                    Acceder
                   </button>
                 </div>
               </form>

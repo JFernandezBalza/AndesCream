@@ -73,13 +73,13 @@ const socialLinks = [
   },
   {
     name: 'Instagram',
-    url: 'https://www.instagram.com/AndesCream',
+    url: 'https://www.instagram.com/andes.heladeria?igsh=enJ4eGx4bG43OW9o',
     lucideIcon: '/images/instagram.png',
     alt: 'Instagram de AndesCream',
   },
   {
     name: 'Ubicación',
-    url: 'https://maps.app.goo.gl/AndesCreamLocation',
+    url: 'https://maps.app.goo.gl/C7BNajmfpuixHnUm8',
     lucideIcon: '/images/location.png',
     alt: 'Ubicación de AndesCream en el mapa',
   },

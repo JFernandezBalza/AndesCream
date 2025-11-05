@@ -10,7 +10,8 @@ import {
   Clock,
   LayoutDashboard,
   CheckCircle,
-  AlertTriangle, // <-- CORRECCIÓN FINAL: Aseguramos que AlertTriangle esté importado.
+  AlertTriangle,
+  Link,
 } from 'lucide-react';
 
 // Componente para una tarea individual
@@ -30,7 +31,7 @@ const TaskItem: React.FC<{
       break;
     case 'Vencida':
       statusClasses = 'bg-red-100 text-red-700 border-red-400';
-      icon = AlertTriangle; // Este icono ahora funciona
+      icon = AlertTriangle;
       break;
     case 'Pendiente':
     default:
@@ -158,6 +159,13 @@ export default function TasksPage() {
               Firestore).
             </p>
           </div>
+          <Link
+            href='/admin'
+            className='mt-8 inline-flex items-center px-4 py-2 border border-transparent rounded-lg text-sm font-medium text-white bg-gray-500 hover:bg-gray-600 transition duration-150'
+          >
+            <LayoutDashboard size={20} className='mr-2' />
+            Volver al Dashboard
+          </Link>
         </div>
       </div>
     </div>

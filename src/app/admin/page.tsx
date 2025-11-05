@@ -2,14 +2,12 @@
 
 import { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
-// Se asume que este componente existe y está en '@/components/Navbar'
 import Navbar from '@/components/Navbar';
 import Link from 'next/link';
 
 // Importamos los iconos de lucide-react para las tarjetas y la carga
 import {
   Settings,
-  Users,
   Package,
   LogOut,
   Briefcase,
@@ -38,7 +36,6 @@ interface ActionCardProps {
   onClick?: () => void;
   color: ActionCardColor;
 }
-// ----------------------------
 
 // Definiciones de clases reutilizables de Tailwind
 const adminClasses = {
@@ -86,7 +83,7 @@ const ActionCard: React.FC<ActionCardProps> = ({
     );
   }
 
-  return <div className={cardClasses}>{content}</div>; // Fallback por si acaso
+  return <div className={cardClasses}>{content}</div>;
 };
 
 export default function AdminPage() {
@@ -201,15 +198,7 @@ export default function AdminPage() {
                   href='/admin/inventory'
                   color='green'
                 />
-
-                {/* 6. Gestión de Usuarios */}
-                <ActionCard
-                  icon={Users}
-                  title='Ver Usuarios'
-                  href='/admin/users'
-                  color='gray'
-                />
-
+                
                 {/* 7. Cerrar Sesión (Usa onClick para la función de logout) */}
                 <ActionCard
                   icon={LogOut}
