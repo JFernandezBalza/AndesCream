@@ -50,7 +50,7 @@ export default function LoginPage() {
   return (
     <div className='min-h-screen'>
       {/*  Navbar: Lo mantengo en false y sin overlay para un estilo limpio de página interior */}
-      <Navbar isOverlay={false} />
+      <Navbar/>
 
       <section
         id='login-section'

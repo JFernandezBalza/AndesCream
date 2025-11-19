@@ -138,7 +138,7 @@ export default function AdminPage() {
   return (
     <div className='min-h-screen'>
       {/* El Navbar necesita ser capaz de manejar la prop isOverlay */}
-      <Navbar isOverlay={false} />
+      <Navbar />
 
       <section
         id='admin-panel'
