@@ -199,7 +199,7 @@ export default function AdminPage() {
                   color='green'
                 />
                 
-                {/* 7. Cerrar Sesión (Usa onClick para la función de logout) */}
+                {/* 6. Cerrar Sesión (Usa onClick para la función de logout) */}
                 <ActionCard
                   icon={LogOut}
                   title='Cerrar Sesión'

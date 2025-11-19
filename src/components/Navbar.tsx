@@ -8,29 +8,22 @@ import { usePathname } from 'next/navigation';
 import Image from 'next/image';
 
 interface NavbarProps {
-  isOverlay?: boolean;
   // Prop para determinar si el usuario es administrador
   isAdmin?: boolean;
-  // ⭐ NUEVO: Función de callback para el cierre de sesión
+  // Función de callback para el cierre de sesión
   onLogoutClick?: () => void;
 }
 
-// Aseguramos que isAdmin y onLogoutClick tengan un valor por defecto
 export default function Navbar({
-  isOverlay = false,
   isAdmin = false,
-  onLogoutClick, // Se acepta la nueva prop
+  onLogoutClick,
 }: NavbarProps) {
   const [isOpen, setIsOpen] = useState(false); // Controla el menú móvil (hamburguesa)
-  // Controla el dropdown de categorías en escritorio
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  // Referencia para el temporizador de cierre (debounce)
+  const [isMenuOpen, setIsMenuOpen] = useState(false); // Controla el dropdown de categorías en escritorio
   const closeTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   const pathname = usePathname();
   const isHomePage = pathname === '/';
-
-  const shouldBeOverlayStyle = true;
 
   // Enlaces de navegación estándar
   const navItems = [
@@ -38,9 +31,9 @@ export default function Navbar({
     { name: 'Contacto/Sugerencias', href: '/contacto' },
   ];
 
-  // Enlaces de administración. ⭐ DASHBOARD AÑADIDO
+  // Enlaces de administración.
   const adminNavItems = [
-    { name: 'Dashboard', href: '/admin', icon: LayoutDashboard }, // ⭐ NUEVO: Dashboard
+    { name: 'Dashboard', href: '/admin', icon: LayoutDashboard },
     { name: 'Productos (ABM)', href: '/admin/productos', icon: null },
     { name: 'Órdenes (ABM)', href: '/admin/ordenes', icon: null },
   ];
@@ -61,39 +54,26 @@ export default function Navbar({
     }, 200); // 200ms de gracia
   };
 
-  // --- Lógica de Estilos (sin cambios) ---
+  // --- Lógica de Estilos (FIJADO A OVERLAY) ---
 
-  // 1. Fondo de la barra completa: Transparente si es overlay, blanco con sombra si no.
-  const bgClass = shouldBeOverlayStyle
-    ? 'bg-transparent absolute top-0 left-0 right-0' // Navbar transparente (Sin efectos)
-    : 'bg-gray-800 shadow-2xl sticky top-0';
+  // 1. Fondo de la barra completa: Siempre transparente y absoluta (overlay).
+  const bgClass = 'bg-transparent absolute top-0 left-0 right-0';
 
-  // Función simplificada para determinar las clases del botón, incluyendo el estado ACTIVO
+  // Función de clases para enlaces (SIEMPRE OVERLAY STYLE, se eliminó la bifurcación)
   const getLinkClasses = (href: string) => {
     const isActive = pathname === href;
 
-    // Estilos para la PORTADA (Botones llamativos sobre fondo claro)
-    if (shouldBeOverlayStyle) {
-      // Fondo semitransparente
-      const baseClass = 'rounded-lg bg-black/20 text-gray-200';
-      // Activo/Hover usa borde y aumenta opacidad del fondo
-      const activeOverlayClass = isActive
-        ? 'border-b-2 border-white/80 font-bold'
-        : 'hover:border-b-2 hover:border-white/50 hover:bg-black/40';
-      // Ajustamos el padding para el estilo de botón
-      return `font-medium transition duration-300 px-3 py-2 ${baseClass} ${activeOverlayClass}`;
-    } else {
-      const baseClass = 'rounded-lg text-gray-100 bg-white/10';
+    // Estilos fijos para OVERLAY (Fondo semitransparente, texto claro)
+    const baseClass = 'rounded-lg bg-black/20 text-gray-200';
+    // Activo/Hover usa borde y aumenta opacidad del fondo
+    const activeOverlayClass = isActive
+      ? 'border-b-2 border-white/80 font-bold'
+      : 'hover:border-b-2 hover:border-white/50 hover:bg-black/40';
 
-      const activeDefaultClass = isActive
-        ? 'border-b-2 border-pink-400 font-bold text-pink-300'
-        : 'hover:border-b-2 hover:border-pink-300 hover:bg-white/20';
-
-      return `text-base transition duration-300 px-3 py-2 ${baseClass} ${activeDefaultClass}`;
-    }
+    return `font-medium transition duration-300 px-3 py-2 ${baseClass} ${activeOverlayClass}`;
   };
 
-  // Estilos para los enlaces dentro del Dropdown de Categorías
+  // Estilos para los enlaces dentro del Dropdown de Categorías (se mantienen, ya que están en fondo blanco)
   const getDropdownLinkClasses = (slug: string) => {
     const href = `/menu/${slug}`;
     const isActive = pathname === href;
@@ -103,49 +83,43 @@ export default function Navbar({
     }`;
   };
 
-  // Estilos del botón principal "Menú"
+  // Estilos del botón principal "Menú" (SIEMPRE OVERLAY STYLE, se eliminó la bifurcación)
   const getMenuButtonClasses = () => {
-    // En la portada usa el estilo overlay normal
-    if (isOverlay) {
-      const baseClass = 'rounded-lg bg-black/20 text-gray-200';
-      return `font-medium transition duration-300 px-3 py-2 ${baseClass} hover:bg-black/30`;
-    } else {
-      const baseClass = 'rounded-lg text-gray-100 bg-black/30';
-      return `font-medium transition duration-300 px-3 py-2 ${baseClass} hover:bg-black/20 flex items-center`;
-    }
+    const baseClass = 'rounded-lg bg-black/20 text-gray-200';
+    return `font-medium transition duration-300 px-3 py-2 ${baseClass} hover:bg-black/30 flex items-center`;
   };
 
   // --- Componente ---
 
   return (
+    // Usa siempre la clase overlay
     <nav className={`w-full z-50 ${bgClass} transition-all duration-300`}>
       <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
         <div className='flex justify-between items-center h-20'>
-          {/* LOGO */}
-          <div
-            className={isHomePage && shouldBeOverlayStyle ? 'flex-grow' : ''}
-          >
-            {(!shouldBeOverlayStyle || !isHomePage) && (
+          {/* LOGO - Usa isHomePage para control de alineación y VISIBILIDAD */}
+          <div className={isHomePage ? 'flex-grow' : ''}>
+            {/* Solo se renderiza si NO es la página de inicio */}
+            {!isHomePage && (
               <Link
                 href='/'
                 className={`flex transition duration-300 transform hover:scale-95 w-65`}
               >
-                {' '}
                 <Image
                   src='/images/logocream.png'
                   alt='AndesCream Logo'
                   width={150}
                   height={40}
                   className='block h-20 w-auto'
-                />{' '}
+                />
               </Link>
             )}
           </div>
 
           {/* ITEMS DE NAVEGACIÓN (Pantallas Grandes) */}
           <div
+            // Usa isHomePage para control de alineación
             className={`hidden md:flex space-x-4 items-center ${
-              isHomePage && shouldBeOverlayStyle ? 'ml-auto' : ''
+              isHomePage ? 'ml-auto' : ''
             }`}
           >
             {/* Enlaces Historia y Contacto */}
@@ -171,7 +145,7 @@ export default function Navbar({
                 </Link>
               ))}
 
-            {/* ⭐ NUEVO: BOTÓN CERRAR SESIÓN (ESCRITORIO) */}
+            {/* BOTÓN CERRAR SESIÓN (ESCRITORIO) */}
             {isAdmin && onLogoutClick && (
               <button
                 onClick={onLogoutClick}
@@ -185,8 +159,8 @@ export default function Navbar({
               </button>
             )}
 
-            {/* DROPDOWN DE CATEGORÍAS (Escritorio) */}
-            {(!isHomePage || !shouldBeOverlayStyle) && (
+            {/* DROPDOWN DE CATEGORÍAS (Escritorio) - Usa isHomePage para control de visibilidad */}
+            {!isHomePage && (
               <div
                 className='relative'
                 onMouseEnter={handleMouseEnter}
@@ -228,9 +202,8 @@ export default function Navbar({
           <button
             onClick={() => setIsOpen(!isOpen)}
             className={`md:hidden p-2 rounded-md ${
-              shouldBeOverlayStyle
-                ? 'text-white hover:bg-white/10'
-                : 'text-gray-700 hover:bg-gray-100'
+              // Estilo fijo de overlay
+              'text-white hover:bg-white/10'
             }`}
             aria-label='Abrir menú de categorías'
           >
@@ -241,17 +214,14 @@ export default function Navbar({
 
       {/* MENÚ MÓVIL/HAMBURGUESA (Pantallas pequeñas) */}
       {isOpen && (
-        <div className='md:hidden bg-white shadow-lg pb-4 transition-all duration-300'>
+        <div className='md:hidden'>
           <div
             className={`
-              md:hidden 
               absolute top-20 left-0 w-full 
               shadow-lg pb-4 transition-all duration-300
-              ${
-                shouldBeOverlayStyle
-                  ? 'bg-gray-900/95 text-white'
-                  : 'bg-white text-gray-800'
-              }
+              
+              // FIJADO: Fondo oscuro semi-transparente para overlay móvil
+              bg-gray-900/95 text-white
             `}
           >
             <div className='flex flex-col space-y-2 px-4 pt-2'>
@@ -261,19 +231,11 @@ export default function Navbar({
                   key={item.name}
                   href={item.href}
                   onClick={() => setIsOpen(false)}
-                  className={`p-3 rounded-md ${
-                    shouldBeOverlayStyle
-                      ? `text-white hover:bg-white/10 ${
-                          pathname === item.href
-                            ? 'bg-white/20 font-semibold'
-                            : ''
-                        }`
-                      : `text-gray-700 hover:bg-pink-50 ${
-                          pathname === item.href
-                            ? 'bg-pink-100 font-semibold'
-                            : ''
-                        }`
-                  }`}
+                  className={`p-3 rounded-md 
+                    // FIJADO: Estilos de overlay móvil
+                    text-white hover:bg-white/10 ${
+                      pathname === item.href ? 'bg-white/20 font-semibold' : ''
+                    }`}
                 >
                   {item.name}
                 </Link>
@@ -283,11 +245,10 @@ export default function Navbar({
               {isAdmin && (
                 <>
                   <h4
-                    className={`font-bold pt-4 pb-1 border-t mt-4 ${
-                      shouldBeOverlayStyle
-                        ? 'text-pink-300 border-gray-700'
-                        : 'text-pink-600 border-gray-200'
-                    }`}
+                    className={`font-bold pt-4 pb-1 border-t mt-4 
+                      // FIJADO: Estilos de overlay móvil
+                      text-pink-300 border-gray-700
+                    `}
                   >
                     Administración
                   </h4>
@@ -296,19 +257,13 @@ export default function Navbar({
                       key={item.name}
                       href={item.href}
                       onClick={() => setIsOpen(false)}
-                      className={`p-3 rounded-md transition duration-150 flex items-center ${
-                        shouldBeOverlayStyle
-                          ? `text-white hover:bg-white/10 ${
-                              pathname === item.href
-                                ? 'bg-white/20 font-semibold'
-                                : ''
-                            }`
-                          : `text-gray-700 hover:bg-pink-50 ${
-                              pathname === item.href
-                                ? 'bg-pink-100 font-semibold'
-                                : ''
-                            }`
-                      }`}
+                      className={`p-3 rounded-md transition duration-150 flex items-center 
+                        // FIJADO: Estilos de overlay móvil
+                        text-white hover:bg-white/10 ${
+                          pathname === item.href
+                            ? 'bg-white/20 font-semibold'
+                            : ''
+                        }`}
                     >
                       {item.icon && <item.icon size={20} className='mr-2' />}
                       {item.name}
@@ -317,7 +272,7 @@ export default function Navbar({
                 </>
               )}
 
-              {/* ⭐ NUEVO: BOTÓN CERRAR SESIÓN (MÓVIL) */}
+              {/* BOTÓN CERRAR SESIÓN (MÓVIL) */}
               {isAdmin && onLogoutClick && (
                 <button
                   onClick={() => {
@@ -328,11 +283,8 @@ export default function Navbar({
                       p-3 rounded-md mt-4 transition duration-150 
                       flex items-center justify-center space-x-2 
                       font-bold 
-                      ${
-                        shouldBeOverlayStyle
-                          ? 'bg-red-700 hover:bg-red-600 text-white'
-                          : 'bg-red-500 hover:bg-red-600 text-white'
-                      }
+                      // FIJADO: Estilos de overlay móvil
+                      bg-red-700 hover:bg-red-600 text-white
                     `}
                   title='Cerrar Sesión'
                 >
@@ -341,15 +293,14 @@ export default function Navbar({
                 </button>
               )}
 
-              {/* Categorías Móvil */}
+              {/* Categorías Móvil - Usa isHomePage para control de visibilidad */}
               {(!isHomePage || isAdmin) && (
                 <>
                   <h4
-                    className={`font-bold pt-4 pb-1 border-t mt-4 ${
-                      shouldBeOverlayStyle
-                        ? 'text-white/80 border-gray-700'
-                        : 'text-gray-800 border-gray-200'
-                    }`}
+                    className={`font-bold pt-4 pb-1 border-t mt-4 
+                      // FIJADO: Estilos de overlay móvil
+                      text-white/80 border-gray-700
+                    `}
                   >
                     Categorías
                   </h4>
@@ -360,11 +311,10 @@ export default function Navbar({
                       key={cat.slug}
                       href={`/menu/${cat.slug}`}
                       onClick={() => setIsOpen(false)}
-                      className={`text-sm p-3 rounded-md transition duration-150 ${
-                        shouldBeOverlayStyle
-                          ? 'text-gray-200 hover:bg-white/10'
-                          : 'text-gray-600 hover:bg-pink-50'
-                      }`}
+                      className={`text-sm p-3 rounded-md transition duration-150 
+                        // FIJADO: Estilos de overlay móvil
+                        text-gray-200 hover:bg-white/10
+                      `}
                     >
                       {cat.nombre}
                     </Link>

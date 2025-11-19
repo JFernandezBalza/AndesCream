@@ -5,14 +5,14 @@ import React, { useState } from 'react';
 // Definimos la interfaz (tipo) de los datos del formulario
 interface FormData {
   name: string;
-  contactInfo: string; // ⭐ Campo combinado de contacto
+  contactInfo: string;
   subject: string;
   sugestion: string;
 }
 
 const ContactoSection = () => {
-  // Número de teléfono de destino para WhatsApp (ejemplo, debes cambiarlo)
-  const WHATSAPP_NUMBER = '+34633017856'; // Formato internacional: Código de país + Número
+  // Número de teléfono de destino para WhatsApp
+  const WHATSAPP_NUMBER = '+584120712420'; // Formato internacional: Código de país + Número
 
   // 1. ESTADO PARA LOS CAMPOS DEL FORMULARIO
   const [formData, setFormData] = useState<FormData>({
@@ -25,7 +25,6 @@ const ContactoSection = () => {
   // 2. ESTADO PARA EL MENSAJE DE ÉXITO/ERROR
   const [status, setStatus] = useState('');
 
-  // Manejador genérico para actualizar el estado cuando el usuario escribe
   const handleChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
@@ -45,7 +44,7 @@ const ContactoSection = () => {
     // Crear el mensaje con los datos del formulario, codificando el URI para el enlace
     const message =
       `¡Hola, mi nombre es ${name}!%0A` +
-      `Mi información de contacto (Teléfono/Email) es: ${contactInfo}%0A%0A` +
+      `Mi información de contacto es: ${contactInfo}%0A%0A` +
       `*ASUNTO:* ${subject}%0A%0A` +
       `*MENSAJE:*%0A` +
       `${sugestion}`;
@@ -57,7 +56,6 @@ const ContactoSection = () => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // Validar campos obligatorios antes de simular el envío
     if (
       !formData.name ||
       !formData.contactInfo ||
@@ -73,11 +71,9 @@ const ContactoSection = () => {
       formData
     );
 
-    // Simulación de éxito:
     setStatus(
       '¡Mensaje enviado a nuestro sistema! Gracias por contactarnos o compartir tu idea. 🤝'
     );
-    // Limpiar formulario
     setFormData({
       name: '',
       contactInfo: '',
@@ -88,9 +84,8 @@ const ContactoSection = () => {
 
   // 4. Manejador para el envío por WhatsApp
   const handleWhatsApp = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault(); // Previene que el formulario se envíe si el botón está dentro de <form>
+    e.preventDefault();
 
-    // Validar campos obligatorios antes de generar el enlace de WhatsApp
     if (
       !formData.name ||
       !formData.contactInfo ||
@@ -109,7 +104,6 @@ const ContactoSection = () => {
     // Abrir el enlace de WhatsApp en una nueva pestaña
     window.open(url, '_blank');
 
-    // Opcional: limpiar el formulario y mostrar un mensaje de éxito después de abrir WhatsApp
     setStatus('Se ha abierto WhatsApp para enviar tu mensaje. ¡Gracias! 📱');
     setFormData({
       name: '',
@@ -138,10 +132,7 @@ const ContactoSection = () => {
   const textareaClass =
     'mt-1 block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-pink-500 focus:border-pink-500 placeholder-gray-500 text-emerald-500 font-sans text-base transition duration-200';
   return (
-    <section
-      className='w-full h-auto py-16 flex flex-col bg-cover bg-[position:40%_center] bg-no-repeat relative '
-      style={{ backgroundImage: `url('/images/fondo5.jpg')` }}
-    >
+    <section>
       <div className='flex-grow flex items-center justify-center py-16 pb-16 bg-black/15 z-0'>
         <div className='max-w-3xl mx-auto text-center px-4'>
           <h2 className='text-4xl font-serif text-gray-500 mb-0'>
@@ -258,12 +249,11 @@ const ContactoSection = () => {
               />
             </div>
 
-            {/* ⭐ CONTENEDOR DE BOTONES (flex) */}
+            {/* CONTENEDOR DE BOTONES (flex) */}
             <div className='flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 pt-4'>
               {/* Botón 1: Enviar por Correo/Sistema (Rosa Pastel) */}
               <button
                 type='submit'
-                // CLASES MODIFICADAS: border-2, bg-white, text-rose-500
                 className='flex-1 flex items-center justify-center py-3 px-4
         border-2 border-rose-500 rounded-md shadow-sm text-lg font-sans 
         text-rose-500 bg-white 
@@ -298,7 +288,7 @@ const ContactoSection = () => {
 
               {/* Botón 2: Enviar por WhatsApp (Verde Menta) */}
               <button
-                type='button' // Importante para que no intente enviar el formulario automáticamente
+                type='button'
                 onClick={handleWhatsApp}
                 className='flex-1 flex items-center justify-center py-3 px-4 border-2 border-emerald-500 rounded-md shadow-sm text-lg font-sans text-emerald-400 bg-white hover:bg-emerald-50 hover:border-emerald-500 hover:text-emerald-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-400 transition duration-300'
                 title='Abrir WhatsApp con el mensaje preescrito'

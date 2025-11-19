@@ -23,7 +23,7 @@ export default function LoginPage() {
     e.preventDefault();
     setError(''); // Limpiamos errores previos
 
-    // --- ⭐ LOGS DE DEBUGGING PARA VERIFICAR LA ENTRADA ---
+    // --- LOGS DE DEBUGGING PARA VERIFICAR LA ENTRADA ---
     console.log("Intento de Login detectado.");
     console.log(`Email ingresado: "${email}"`);
     console.log(`Password ingresada: "${password.replace(/./g, '*')}" (Solo caracteres)`);
@@ -49,7 +49,7 @@ export default function LoginPage() {
 
   return (
     <div className='min-h-screen'>
-      {/* ⭐ Navbar: Lo mantengo en false y sin overlay para un estilo limpio de página interior */}
+      {/*  Navbar: Lo mantengo en false y sin overlay para un estilo limpio de página interior */}
       <Navbar isOverlay={false} />
 
       <section
@@ -128,7 +128,7 @@ export default function LoginPage() {
                   href='/'
                   className='text-sm text-gray-600 hover:text-pink-600 hover:underline transition duration-150'
                 >
-                  ← Volver a la página principal
+                  ← Volver
                 </Link>
               </div>
             </div>

@@ -9,7 +9,7 @@ import Link from 'next/link';
 import {
   Settings,
   LayoutDashboard,
-  Image as ImageIcon, // ¡CORRECCIÓN! Renombramos 'Image' a 'ImageIcon'
+  Image as ImageIcon,
   DollarSign,
   IceCream,
 } from 'lucide-react';
@@ -73,8 +73,6 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         role='img'
         aria-label={`Placeholder de imagen para ${product.name}`}
       >
-        {/* Usamos el componente renombrado y eliminamos 'alt'. 
-            aria-hidden="true" es suficiente para marcar el icono como decorativo. */}
         <ImageIcon size={32} className='text-gray-400' aria-hidden='true' />
       </div>
 
@@ -120,7 +118,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                 onClick={() => {
                   setIsEditing(false);
                   setCurrentPrice(product.price);
-                }} // Revertir y cancelar
+                }}
                 className='bg-gray-300 text-gray-800 px-3 py-1 text-sm rounded-md hover:bg-gray-400 transition'
               >
                 Cancelar

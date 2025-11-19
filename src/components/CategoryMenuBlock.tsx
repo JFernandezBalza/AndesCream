@@ -9,7 +9,6 @@ interface CategoryMenuBlockProps {
 export default function CategoryMenuBlock({
   isOverlay = false,
 }: CategoryMenuBlockProps) {
-  // Determina la clase de fondo de toda la sección
   const sectionBgClass = isOverlay
     ? 'py-10 bg-gradient-to-t from-black/10 to-transparent'
     : 'py-16 bg-gray-50';
@@ -17,7 +16,6 @@ export default function CategoryMenuBlock({
   return (
     <div className={`w-full ${sectionBgClass}`}>
       <div className='max-w-7xl mx-auto px-4'>
-        {/* Título solo si NO es un overlay, o dale estilo para el overlay */}
         {!isOverlay && (
           <h2 className='text-3xl font-serif text-gray-900 sm:text-4xl mb-12'>
             Descubre Nuestros Sabores
@@ -43,7 +41,7 @@ export default function CategoryMenuBlock({
             {CATEGORIAS.map((categoria: Categoria) => (
               <Link
                 key={categoria.slug}
-                href={`/menu/${categoria.slug}`} // Simplificamos y centramos el Link, eliminando las clases de ancho w-XX y h-XX
+                href={`/menu/${categoria.slug}`}
                 className={`group flex flex-col items-center justify-center 
                 p-2 sm:p-3 
                 transition-all duration-300 transform hover:scale-105 hover:shadow-2xl 
