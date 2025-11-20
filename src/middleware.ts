@@ -29,11 +29,11 @@ export function middleware(request: NextRequest) {
     // ⚠️ ¡COMENTAMOS TEMPORALMENTE LA VERIFICACIÓN DE SEGURIDAD!
     // Esto es solo para que el router.push en /login funcione y puedas diseñar /admin.
     // **DEBES** restaurar esto ANTES de salir a producción.
-    /*
+    
     if (!isUserLoggedIn || userRole !== 'ADMIN') {
       return NextResponse.redirect(new URL('/login', request.url));
     }
-    */
+
     // Permitimos el acceso para la prueba:
     return NextResponse.next();
   }
