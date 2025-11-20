@@ -8,7 +8,6 @@ import {
   Zap,
   LayoutDashboard,
   AlertTriangle,
-  Link as LucideLink,
 } from 'lucide-react';
 import Link from 'next/link';
 

@@ -10,7 +10,6 @@ import {
   Image as ImageIcon,
   PaintBucket,
   LayoutDashboard,
-  Link as LucideLink, // Renombramos Link de Lucide para evitar conflicto con next/link
 } from 'lucide-react';
 import Link from 'next/link'; // Usamos next/link para navegación
 

@@ -12,7 +12,6 @@ import {
   LayoutDashboard,
   CheckCircle,
   AlertTriangle,
-  Link as LucideLink, // Renombramos Link de Lucide para evitar conflicto con next/link
 } from 'lucide-react';
 
 // Componente para una tarea individual
