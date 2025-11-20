@@ -1,6 +1,6 @@
 
 const HistoriaContent = () => (
-  <div className='w-full h-full flex flex-col items-center justify-center py-16 bg-black/15 z-0'>
+  <div className='w-full min-h-screen flex flex-col items-center justify-center py-16 bg-black/15 z-0'>
     <div className='w-full max-w-4xl lg:max-w-6xl'>
       <div className='px-4 sm:px-6 py-4 text-gray-700 bg-white/70 shadow-2xl rounded-lg mx-4 z-0'>
         <h1 className='text-4xl font-serif text-gray-500 mb-2'>
@@ -47,18 +47,13 @@ const HistoriaContent = () => (
   </div>
 );
 
-// --- Componente Principal (La "página") ---
-
 export default function HistoriaPage() {
   return (
-    <div className='h-screen flex flex-col'>
 
-      {/* ⭐ 2. Contenido Principal: flex-grow para ocupar el espacio restante */}
       <main
         id='nosotros'
       >
-        <HistoriaContent />
+        <HistoriaContent/>
       </main>
-    </div>
   );
 }

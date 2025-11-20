@@ -99,7 +99,7 @@ const Footer = () => {
       {/* Contenedor principal de ancho limitado, centrado y con padding horizontal */}
       <div className='max-w-9xl mx-auto px-4 sm:px-2 bg-gradient-to-t from-black/60 to-transparent'>
         
-        <div className='flex flex-col md:flex-row justify-between items-center text-center md:text-left gap-6 sm:gap-8 border-b border-gray-300/50 py-1 -mt-2 **w-full md:mx-8**'>
+        <div className='flex flex-col md:flex-row justify-between items-center text-center md:text-left gap-6 sm:gap-8 border-b border-gray-300/50 py-1  **w-full md:mx-8**'>
          
           <div className='flex flex-col sm:flex-row items-center sm:items-start space-y-2 sm:space-y-0 sm:space-x-4 md:ml-15'>
             <Link
@@ -140,9 +140,6 @@ const Footer = () => {
             </div>
           </div>
         </div>
-
-        {/* Enlaces Legales o de Interés Adicionales (Opcional) */}
-        <div className='flex justify-center md:justify-end space-x-6 pt-1'></div>
       </div>
     </footer>
   );

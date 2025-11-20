@@ -2,15 +2,15 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import Navbar from '@/components/Navbar';
 import {
   Package,
   Warehouse,
   Zap,
   LayoutDashboard,
   AlertTriangle,
-  Link,
+  Link as LucideLink,
 } from 'lucide-react';
+import Link from 'next/link';
 
 // Componente para la fila de un ítem de inventario
 const InventoryItemRow: React.FC<{
@@ -19,6 +19,7 @@ const InventoryItemRow: React.FC<{
   unit: string;
 }> = ({ name, stock, unit }) => {
   const lowStock = stock < 10;
+  // Usamos clases dinámicas de Tailwind, que deben estar completas
   const statusColor = lowStock ? 'text-red-600' : 'text-green-600';
   const statusBg = lowStock ? 'bg-red-50' : 'bg-green-50';
 
@@ -52,11 +53,14 @@ const InventoryItemRow: React.FC<{
 
 export default function InventoryPage() {
   const router = useRouter();
+  // NOTA IMPORTANTE: Para producción real, usa Firestore en lugar de localStorage para autenticación.
+  // El uso de localStorage aquí es solo para simulación de un entorno Canvas.
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
   // Lógica de protección de ruta (Guardia)
   useEffect(() => {
+    // En un entorno real, usarías la autenticación de Firebase aquí
     const adminFlag = localStorage.getItem('is_admin_authenticated');
     if (adminFlag === 'true') {
       setIsAuthenticated(true);
@@ -66,6 +70,7 @@ export default function InventoryPage() {
     setIsLoading(false);
   }, [router]);
 
+  // 1. Pantalla de carga/verificación
   if (isLoading || !isAuthenticated) {
     return (
       <div className='min-h-screen flex flex-col items-center justify-center bg-gray-100 p-8'>
@@ -78,12 +83,13 @@ export default function InventoryPage() {
     );
   }
 
-  // Contenido de la página de Inventario
+  // 2. Contenido de la página de Inventario (APLICAMOS EL ENVOLTORIO UNIFICADO)
   return (
-    <div className='min-h-screen bg-gray-50'>
-      <Navbar isAdmin={true} />
-      <div className='max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8'>
-        <div className='bg-white shadow-2xl rounded-xl p-8'>
+    <div className='w-full min-h-screen flex flex-col items-center justify-center py-20 z-0'>
+      <div className='w-full max-w-4xl lg:max-w-6xl'>
+        {/* Usamos bg-white/90 para la consistencia con el dashboard */}
+        <div className='px-4 sm:px-6 py-8 text-gray-700 bg-white/90 shadow-2xl rounded-lg mx-4 z-0'>
+          {/* Contenido de la página de Inventario */}
           <h1 className='text-4xl font-serif text-green-600 mb-8 border-b pb-3 flex items-center'>
             <Warehouse size={32} className='mr-3' />
             Inventario y Control de Stock

@@ -133,7 +133,7 @@ const ContactoSection = () => {
     'mt-1 block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-pink-500 focus:border-pink-500 placeholder-gray-500 text-emerald-500 font-sans text-base transition duration-200';
   return (
     <section>
-      <div className='flex-grow flex items-center justify-center py-16 pb-16 bg-black/15 z-0'>
+      <div className='flex-grow flex items-center justify-center py-20 bg-black/15 z-0'>
         <div className='max-w-3xl mx-auto text-center px-4'>
           <h2 className='text-4xl font-serif text-gray-500 mb-0'>
             Contacto, Preguntas y Sugerencias

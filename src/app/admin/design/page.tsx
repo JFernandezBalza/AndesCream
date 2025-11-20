@@ -1,66 +1,72 @@
+// app/admin/design/page.tsx (CORREGIDO - Aliniado con RootLayout)
+
 'use client';
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import Navbar from '@/components/Navbar';
+// ❌ ELIMINAMOS: import Navbar from '@/components/Navbar';
 import {
-  Palette,
-  Image as ImageIcon,
-  PaintBucket,
-  LayoutDashboard,
-  Link,
+  Palette,
+  Image as ImageIcon,
+  PaintBucket,
+  LayoutDashboard,
+  Link as LucideLink, // Renombramos Link de Lucide para evitar conflicto con next/link
 } from 'lucide-react';
+import Link from 'next/link'; // Usamos next/link para navegación
 
 // Componente para seleccionar color/tema
 const ColorPicker: React.FC<{ title: string; color: string }> = ({
-  title,
-  color,
+  title,
+  color,
 }) => (
-  <div className='flex items-center space-x-3 p-3 bg-gray-50 rounded-lg border border-gray-200'>
-    <div
-      className={`w-8 h-8 rounded-full shadow-md ${color} ring-4 ring-white`}
-    ></div>
-    <p className='text-gray-700 font-medium flex-grow'>{title}</p>
-    <button className='text-sm bg-pink-500 text-white px-3 py-1 rounded hover:bg-pink-600 transition'>
-      Seleccionar
-    </button>
-  </div>
+  <div className='flex items-center space-x-3 p-3 bg-gray-50 rounded-lg border border-gray-200'>
+    <div
+      // Utilizamos una clase compuesta para asegurar que Tailwind detecte los colores
+      className={`w-8 h-8 rounded-full shadow-md ${color} ring-4 ring-white border-2 border-gray-300`}
+    ></div>
+    <p className='text-gray-700 font-medium flex-grow'>{title}</p>
+    <button className='text-sm bg-pink-500 text-white px-3 py-1 rounded hover:bg-pink-600 transition'>
+      Seleccionar
+    </button>
+  </div>
 );
 
 export default function DesignPage() {
-  const router = useRouter();
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const router = useRouter();
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
-  // Lógica de protección de ruta (Guardia)
-  useEffect(() => {
-    const adminFlag = localStorage.getItem('is_admin_authenticated');
-    if (adminFlag === 'true') {
-      setIsAuthenticated(true);
-    } else {
-      router.push('/login');
-    }
-    setIsLoading(false);
-  }, [router]);
+  // Lógica de protección de ruta (Guardia)
+  useEffect(() => {
+    const adminFlag = localStorage.getItem('is_admin_authenticated');
+    if (adminFlag === 'true') {
+      setIsAuthenticated(true);
+    } else {
+      router.push('/login');
+    }
+    setIsLoading(false);
+  }, [router]);
 
-  if (isLoading || !isAuthenticated) {
-    return (
-      <div className='min-h-screen flex flex-col items-center justify-center bg-gray-100 p-8'>
-        <div className='animate-spin rounded-full h-12 w-12 border-b-4 border-pink-500 mb-4'></div>
-        <p className='text-xl text-gray-700 font-serif flex items-center'>
-          <LayoutDashboard className='w-5 h-5 mr-2' />
-          Verificando acceso...
-        </p>
-      </div>
-    );
-  }
+  // 1. Pantalla de carga/verificación
+  if (isLoading || !isAuthenticated) {
+    return (
+      <div className='min-h-screen flex flex-col items-center justify-center bg-gray-100 p-8'>
+        <div className='animate-spin rounded-full h-12 w-12 border-b-4 border-pink-500 mb-4'></div>
+        <p className='text-xl text-gray-700 font-serif flex items-center'>
+          <LayoutDashboard className='w-5 h-5 mr-2' />
+          Verificando acceso...
+        </p>
+      </div>
+    );
+  }
 
-  // Contenido de la página de Diseño
-  return (
-    <div className='min-h-screen bg-gray-50'>
-      <Navbar isAdmin={true} />
-      <div className='max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8'>
-        <div className='bg-white shadow-2xl rounded-xl p-8'>
+  // 2. Contenido de la página de Diseño (APLICAMOS EL ENVOLTORIO UNIFICADO)
+  return (
+    <div className='w-full min-h-screen flex flex-col items-center justify-center py-20 z-0'>
+      <div className='w-full max-w-4xl lg:max-w-6xl'>
+        {/* Usamos bg-white/90 para la consistencia con el dashboard */}
+        <div className='px-4 sm:px-6 py-8 text-gray-700 bg-white/90 shadow-2xl rounded-lg mx-4 z-0'>
+          {/* Contenido de la página de Diseño */}
           <h1 className='text-4xl font-serif text-yellow-600 mb-8 border-b pb-3 flex items-center'>
             <Palette size={32} className='mr-3' />
             Apariencia y Fondos del Sitio
