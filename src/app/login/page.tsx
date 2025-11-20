@@ -1,20 +1,19 @@
 'use client';
 
 import { FormEvent, useState } from 'react';
-import Link from 'next/link';
 import { LogIn } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import Link from 'next/link'; // Importación necesaria para el error del <a>
+import { useRouter } from 'next/navigation'; // Importación necesaria para la redirección
+import Cookies from 'js-cookie';
 
 // ¡No usar en producción! Credenciales hardcodeadas para simulación
 const ADMIN_EMAIL = 'andescream';
 const ADMIN_PASSWORD = 'valen123';
 
 export default function LoginPage() {
-  const router = useRouter();
-  // El fondo se gestiona asumiendo que está en la carpeta /public
+  const router = useRouter(); // Inicializamos el hook de router
   const backgroundImage = '/images/fondo5.jpg';
 
-  // Estados para capturar los valores del formulario
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -22,48 +21,47 @@ export default function LoginPage() {
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
 
-    setError(''); // Limpiamos errores previos
+    setError('');
 
     console.log('Intento de Login detectado.');
 
     // 1. Verificación de credenciales simulada
     if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
-      // 2. Simulación de éxito:
-      localStorage.setItem('is_admin_authenticated', 'true');
+      // 2. SIMULACIÓN DE ÉXITO:
+      Cookies.set('auth_token', 'simulated_admin_token', {
+        expires: 1 / 24, // Expira en 1/24 de día, es decir, 1 hora
+        path: '/', // Disponible en toda la aplicación
+      });
+
       console.log(
-        '✅ ÉXITO: Inicio de sesión correcto. Iniciando redirección a /admin...'
+        '✅ ÉXITO: Cookie de autenticación establecida. Iniciando redirección a /admin...'
       );
-      router.push('/admin'); // Redirige al panel de administración
+
+      // 3. Redirige.
+      // ⭐ SOLUCIÓN: Usamos router.push() en lugar de window.location.href
+      router.push('/admin');
     } else {
-      // 3. Si las credenciales fallan:
+      // 4. Si las credenciales fallan:
       console.error('❌ FALLO: Credenciales incorrectas.');
-      // Mensaje de error más explícito para el usuario
       setError(
-        'Credenciales incorrectas. Intenta de nuevo. (Sugerencia: andescream/valentina123)'
+        'Credenciales incorrectas. Intenta de nuevo. (Sugerencia: andescream/valen123)'
       );
     }
   };
 
   return (
-    <div >
-
+    <div>
       <section
         id='login-section'
-        // min-h-screen asegura la altura completa. pt-16 compensa el Navbar fijo.
         className='w-full min-h-screen pt-16 flex flex-col bg-cover bg-[position:35%_center] bg-no-repeat relative md:bg-center'
         style={{ backgroundImage: `url('${backgroundImage}')` }}
       >
-        {/*
-          Contenedor de Login. flex-grow permite que ocupe el espacio restante.
-          bg-black/40 asegura mejor contraste para la legibilidad.
-        */}
         <div className='flex-grow flex items-center justify-center py-16 pb-16 bg-black/40 z-0'>
           <div className='w-full max-w-sm sm:max-w-md'>
             <div className='px-4 sm:px-6 py-8 text-gray-700 bg-white/95 shadow-2xl rounded-xl mx-4 z-0 border border-gray-200'>
-              {/* 2. Título con estilo de Admin Dashboard (borde inferior rosa) */}
               <h1
                 className='text-3xl md:text-4xl font-serif text-gray-800 mb-6 flex items-center justify-center
-                             border-b-2 border-pink-500 pb-3'
+                                 border-b-2 border-pink-500 pb-3'
               >
                 <LogIn className='w-7 h-7 mr-3 text-pink-600' />
                 Inicio de Sesión
@@ -92,7 +90,7 @@ export default function LoginPage() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     className='w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 
-                               focus:outline-none focus:ring-pink-500 focus:border-pink-500 transition duration-150'
+                    focus:outline-none focus:ring-pink-500 focus:border-pink-500 transition duration-150'
                     placeholder='andescream'
                   />
                 </div>
@@ -112,7 +110,7 @@ export default function LoginPage() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     className='w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 
-                               focus:outline-none focus:ring-pink-500 focus:border-pink-500 transition duration-150'
+                                 focus:outline-none focus:ring-pink-500 focus:border-pink-500 transition duration-150'
                     placeholder='***********'
                   />
                 </div>
@@ -121,9 +119,9 @@ export default function LoginPage() {
                   <button
                     type='submit'
                     className='w-full flex justify-center py-2.5 px-4 border border-transparent rounded-lg shadow-lg 
-                               text-base font-semibold text-white bg-pink-600 hover:bg-pink-700 
-                               focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500 
-                               transition duration-150 transform hover:scale-[1.01]'
+                                 text-base font-semibold text-white bg-pink-600 hover:bg-pink-700 
+                                 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500 
+                                 transition duration-150 transform hover:scale-[1.01]'
                   >
                     Acceder
                   </button>
