@@ -5,7 +5,6 @@ import { TrendingUp } from 'lucide-react';
 
 const QUOTE_STORAGE_KEY = 'daily_admin_quote';
 
-// Interfaz para la estructura de la cita
 interface QuoteType {
   text: string;
   author: string;
@@ -13,7 +12,6 @@ interface QuoteType {
 
 // Lista de citas motivacionales en español (Autocontenido para evitar la dependencia de NPM)
 const QUOTES: QuoteType[] = [
-  // Citas 1-10
   {
     text: 'El éxito es la suma de pequeños esfuerzos repetidos día tras día.',
     author: 'Robert Collier',
@@ -39,14 +37,14 @@ const QUOTES: QuoteType[] = [
     text: 'Solo podemos ver una corta distancia hacia adelante, pero podemos ver muchas cosas que necesitan hacerse ahí.',
     author: 'Alan Turing',
   },
-  { text: 'La mejor venganza es el éxito masivo.', author: 'Frank Sinatra' },
+  { text: 'La mejor venganza es el éxito masivo.', author: 'Frank Sinatra' 
+  },
   {
     text: 'El único modo de hacer un gran trabajo es amar lo que haces.',
     author: 'Steve Jobs',
   },
-  { text: 'Si puedes soñarlo, puedes lograrlo.', author: 'Walt Disney' },
-
-  // Citas 11-20
+  { text: 'Si puedes soñarlo, puedes lograrlo.', author: 'Walt Disney' 
+  },
   {
     text: 'La disciplina es el puente entre las metas y los logros.',
     author: 'Jim Rohn',
@@ -87,8 +85,6 @@ const QUOTES: QuoteType[] = [
     text: 'Un viaje de mil millas comienza con un solo paso.',
     author: 'Lao Tzu',
   },
-
-  // Citas 21-30
   {
     text: 'Nunca es demasiado tarde para ser quien podrías haber sido.',
     author: 'George Eliot',
@@ -126,8 +122,6 @@ const QUOTES: QuoteType[] = [
     text: 'Un error se convierte en error solo cuando te niegas a corregirlo.',
     author: 'John F. Kennedy',
   },
-
-  // Citas 31-40
   {
     text: 'Nuestra mayor debilidad radica en rendirnos. La forma más segura de tener éxito es intentarlo una vez más.',
     author: 'Thomas Edison',
@@ -165,8 +159,6 @@ const QUOTES: QuoteType[] = [
     text: 'El dolor es temporal. Rendirse es para siempre.',
     author: 'Lance Armstrong',
   },
-
-  // Citas 41-50
   { text: 'Convierte tus heridas en sabiduría.', author: 'Oprah Winfrey' },
   {
     text: 'Sé tú mismo; todos los demás ya están ocupados.',
@@ -195,8 +187,6 @@ const QUOTES: QuoteType[] = [
     text: 'Si la gente duda de lo lejos que puedes llegar, llega tan lejos que ya no puedas oírlos.',
     author: 'Michele Ruiz',
   },
-
-  // Citas 51-60
   {
     text: 'Empieza donde estás. Usa lo que tienes. Haz lo que puedas.',
     author: 'Arthur Ashe',
@@ -234,8 +224,6 @@ const QUOTES: QuoteType[] = [
     text: 'La creatividad es la inteligencia divirtiéndose.',
     author: 'Albert Einstein',
   },
-
-  // Citas 61-70
   {
     text: 'El futuro está en manos de quienes se atreven a soñar.',
     author: 'Eleanor Roosevelt',
@@ -270,8 +258,6 @@ const QUOTES: QuoteType[] = [
     text: 'El esfuerzo y el coraje no son suficientes sin propósito y dirección.',
     author: 'John F. Kennedy',
   },
-
-  // Citas 71-80
   {
     text: 'La vida es demasiado corta para perder el tiempo con gente que no te valora.',
     author: 'Anónimo',
@@ -306,8 +292,6 @@ const QUOTES: QuoteType[] = [
     text: 'El éxito es ir de fracaso en fracaso sin perder el entusiasmo.',
     author: 'Winston Churchill',
   },
-
-  // Citas 81-90
   {
     text: 'La mejor vista viene después de la subida más dura.',
     author: 'Anónimo',
@@ -345,8 +329,6 @@ const QUOTES: QuoteType[] = [
     text: 'Todo lo que siempre has querido está al otro lado del miedo.',
     author: 'George Addair',
   },
-
-  // Citas 91-100
   {
     text: 'La mejor preparación para el mañana es hacer tu mejor trabajo hoy.',
     author: 'H. Jackson Brown Jr.',
@@ -378,7 +360,6 @@ const QUOTES: QuoteType[] = [
 ];
 
 /**
- * Función que selecciona una cita del array local basándose en el día del año.
  * Esto asegura que la cita cambie diariamente de forma predecible.
  */
 function getQuoteOfTheDay(): QuoteType {
@@ -422,7 +403,6 @@ function getDailyQuote(): QuoteType {
         'Error parsing stored quote data, generating new one:',
         error
       );
-      // Si hay un error, forzamos la generación de una nueva cita
     }
   }
 

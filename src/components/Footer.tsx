@@ -88,9 +88,8 @@ const socialLinks = [
 const Footer = () => {
   const currentYear = new Date().getFullYear();
 
-  // CLASES DEL FOOTER: Mantiene la posición fija (fixed bottom-0)
   const footerClasses =
-    'w-full py-0 text-sm transition-colors duration-300 **fixed bottom-0 left-0 z-50** bg-transparent text-white drop-shadow-lg border-t-0';
+    'w-full py-0 text-sm transition-colors duration-300 bg-transparent text-white drop-shadow-lg border-t-0';
 
   const linkTextColor = 'text-white hover:text-pink-300';
 

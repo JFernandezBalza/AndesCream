@@ -1,9 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import { CATEGORIAS, Categoria } from '@/data/categorias'; // Asumo que estos imports son correctos
+import { CATEGORIAS, Categoria } from '@/data/categorias';
 
-// 1. Eliminamos la interfaz CategoryMenuBlockProps ya que no recibe props
-//    y eliminamos la necesidad de la prop isOverlay.
 
 export default function CategoryMenuBlock() {
   // 2. Definimos las clases de fondo directamente con el estilo de overlay.
@@ -12,18 +10,12 @@ export default function CategoryMenuBlock() {
   return (
     <div className={`w-full ${sectionBgClass}`}>
       <div className='max-w-7xl mx-auto px-4'>
-        {/* 3. Eliminamos la sección condicional del título, ya que el título
-             solo se mostraba cuando NO era overlay. Asumo que en modo overlay
-             no debe llevar título. Si sí debe llevar título, quita el !isOverlay
-             y ajusta las clases de texto para que combinen con el fondo oscuro. */}
-
         <div
           className='
               flex justify-center /* MÓVIL: Centra el grupo de logos */
               md:justify-end md:mr-10 /* ESCRITORIO: Alinea el grupo a la derecha */
             '
         >
-          {/* Grid para los logos/categorías */}
           <div
             className='
             grid 
@@ -38,7 +30,6 @@ export default function CategoryMenuBlock() {
               <Link
                 key={categoria.slug}
                 href={`/menu/${categoria.slug}`}
-                // 4. Aplicamos las clases de overlay (bg-white/20) directamente
                 className={`group flex flex-col items-center justify-center 
                   p-2 sm:p-3 
                   transition-all duration-300 transform hover:scale-105 hover:shadow-2xl 
@@ -46,7 +37,7 @@ export default function CategoryMenuBlock() {
                   bg-white/20 
                 `}
               >
-                {/* Logo de la Categoría */}
+
                 <div className='w-10 sm:w-12 h-10 sm:h-12 relative'>
                   <Image
                     src={categoria.logoPath}

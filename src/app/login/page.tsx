@@ -2,8 +2,8 @@
 
 import { FormEvent, useState } from 'react';
 import { LogIn } from 'lucide-react';
-import Link from 'next/link'; // Importación necesaria para el error del <a>
-import { useRouter } from 'next/navigation'; // Importación necesaria para la redirección
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import Cookies from 'js-cookie';
 
 // ¡No usar en producción! Credenciales hardcodeadas para simulación
@@ -11,7 +11,7 @@ const ADMIN_EMAIL = 'andescream';
 const ADMIN_PASSWORD = 'valen123';
 
 export default function LoginPage() {
-  const router = useRouter(); // Inicializamos el hook de router
+  const router = useRouter();
   const backgroundImage = '/images/fondo5.jpg';
 
   const [email, setEmail] = useState('');
@@ -44,7 +44,7 @@ export default function LoginPage() {
       // 4. Si las credenciales fallan:
       console.error('❌ FALLO: Credenciales incorrectas.');
       setError(
-        'Credenciales incorrectas. Intenta de nuevo. (Sugerencia: andescream/valen123)'
+        'Credenciales incorrectas. Intenta de nuevo.'
       );
     }
   };
@@ -67,7 +67,6 @@ export default function LoginPage() {
                 Inicio de Sesión
               </h1>
 
-              {/* Mensaje de Error */}
               {error && (
                 <div className='mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded-lg text-sm'>
                   {error}

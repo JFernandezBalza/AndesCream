@@ -18,12 +18,17 @@ export default function Navbar({
   isAdmin = false,
   onLogoutClick,
 }: NavbarProps) {
-  const [isOpen, setIsOpen] = useState(false); // Controla el menú móvil (hamburguesa)
-  const [isMenuOpen, setIsMenuOpen] = useState(false); // Controla el dropdown de categorías en escritorio
+  const [isOpen, setIsOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const closeTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   const pathname = usePathname();
   const isHomePage = pathname === '/';
+  
+  // Condición para mostrar el botón de Dashboard: Eres Admin Y NO estás en la ruta /admin o /admin/...
+  const isDashboardRoute = pathname.startsWith('/admin');
+  const showDashboardButton = isAdmin && !isDashboardRoute;
+
 
   // Enlaces de navegación estándar
   const navItems = [
@@ -51,19 +56,14 @@ export default function Navbar({
   const handleMouseLeave = () => {
     closeTimerRef.current = setTimeout(() => {
       setIsMenuOpen(false);
-    }, 200); // 200ms de gracia
+    }, 200);
   };
 
-  // --- Lógica de Estilos (FIJADO A OVERLAY) ---
-
-  // 1. Fondo de la barra completa: Siempre transparente y absoluta (overlay).
   const bgClass = 'bg-transparent absolute top-0 left-0 right-0';
 
-  // Función de clases para enlaces (SIEMPRE OVERLAY STYLE, se eliminó la bifurcación)
   const getLinkClasses = (href: string) => {
     const isActive = pathname === href;
 
-    // Estilos fijos para OVERLAY (Fondo semitransparente, texto claro)
     const baseClass = 'rounded-lg bg-black/20 text-gray-200';
     // Activo/Hover usa borde y aumenta opacidad del fondo
     const activeOverlayClass = isActive
@@ -83,7 +83,6 @@ export default function Navbar({
     }`;
   };
 
-  // Estilos del botón principal "Menú" (SIEMPRE OVERLAY STYLE, se eliminó la bifurcación)
   const getMenuButtonClasses = () => {
     const baseClass = 'rounded-lg bg-black/20 text-gray-200';
     return `font-medium transition duration-300 px-3 py-2 ${baseClass} hover:bg-black/30 flex items-center`;
@@ -92,13 +91,11 @@ export default function Navbar({
   // --- Componente ---
 
   return (
-    // Usa siempre la clase overlay
     <nav className={`w-full z-50 ${bgClass} transition-all duration-300`}>
       <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
         <div className='flex justify-between items-center h-20'>
-          {/* LOGO - Usa isHomePage para control de alineación y VISIBILIDAD */}
           <div className={isHomePage ? 'flex-grow' : ''}>
-            {/* Solo se renderiza si NO es la página de inicio */}
+            {/* Logo solo si NO estamos en la Home */}
             {!isHomePage && (
               <Link
                 href='/'
@@ -113,16 +110,18 @@ export default function Navbar({
                 />
               </Link>
             )}
+            {/* Logo en Home si no es admin y no está en admin route - para evitar que el logo ocupe todo el espacio */}
+            {isHomePage && !isAdmin && (
+                <div className='block h-20 w-auto'></div>
+            )}
           </div>
 
           {/* ITEMS DE NAVEGACIÓN (Pantallas Grandes) */}
           <div
-            // Usa isHomePage para control de alineación
             className={`hidden md:flex space-x-4 items-center ${
               isHomePage ? 'ml-auto' : ''
             }`}
           >
-            {/* Enlaces Historia y Contacto */}
             {navItems.map((item) => (
               <Link
                 key={item.name}
@@ -133,19 +132,21 @@ export default function Navbar({
               </Link>
             ))}
 
-            {/* ENLACES DE ADMIN (Escritorio) - Solo si isAdmin es true */}
-            {isAdmin &&
-              adminNavItems.map((item) => (
-                <Link
-                  key={item.name}
-                  href={item.href}
-                  className={getLinkClasses(item.href)}
-                >
-                  {item.name}
-                </Link>
-              ))}
-
-            {/* BOTÓN CERRAR SESIÓN (ESCRITORIO) */}
+            {/* BOTÓN IR AL DASHBOARD (ESCRITORIO) - Se muestra si eres admin y NO estás ya en /admin/... */}
+            {showDashboardButton && (
+              <Link
+                href='/admin'
+                className={`${getLinkClasses(
+                  '/admin'
+                )} flex items-center bg-green-600/70 hover:bg-green-700/80 text-white`}
+                title='Ir al Dashboard'
+              >
+                <LayoutDashboard size={20} className='mr-1' />
+                Dashboard
+              </Link>
+            )}
+            
+            {/* BOTÓN CERRAR SESIÓN (ESCRITORIO) - Se muestra si eres admin */}
             {isAdmin && onLogoutClick && (
               <button
                 onClick={onLogoutClick}
@@ -159,7 +160,7 @@ export default function Navbar({
               </button>
             )}
 
-            {/* DROPDOWN DE CATEGORÍAS (Escritorio) - Usa isHomePage para control de visibilidad */}
+            {/* Menú Dropdown de Categorías */}
             {!isHomePage && (
               <div
                 className='relative'
@@ -179,7 +180,6 @@ export default function Navbar({
                   />
                 </button>
 
-                {/* Contenedor del Dropdown */}
                 {isMenuOpen && (
                   <div className='absolute right-0 mt-2 w-56 bg-white rounded-md shadow-lg py-1 ring-1 ring-black ring-opacity-5 z-50'>
                     {CATEGORIAS.map((cat) => (
@@ -202,17 +202,16 @@ export default function Navbar({
           <button
             onClick={() => setIsOpen(!isOpen)}
             className={`md:hidden p-2 rounded-md ${
-              // Estilo fijo de overlay
               'text-white hover:bg-white/10'
             }`}
-            aria-label='Abrir menú de categorías'
+            aria-label='Abrir menú'
           >
             {isOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
         </div>
       </div>
 
-      {/* MENÚ MÓVIL/HAMBURGUESA (Pantallas pequeñas) */}
+      {/* MENÚ MÓVIL */}
       {isOpen && (
         <div className='md:hidden'>
           <div
@@ -225,7 +224,6 @@ export default function Navbar({
             `}
           >
             <div className='flex flex-col space-y-2 px-4 pt-2'>
-              {/* Enlaces principales (Historia y Contacto) */}
               {navItems.map((item) => (
                 <Link
                   key={item.name}
@@ -241,7 +239,7 @@ export default function Navbar({
                 </Link>
               ))}
 
-              {/* ENLACES DE ADMIN (Móvil) - Solo si isAdmin es true */}
+              {/* ENLACES Y BOTONES DE ADMINISTRACIÓN EN MÓVIL */}
               {isAdmin && (
                 <>
                   <h4
@@ -252,6 +250,20 @@ export default function Navbar({
                   >
                     Administración
                   </h4>
+                  
+                  {/* Botón Ir al Dashboard (Móvil) - Se muestra si eres admin y NO estás ya en /admin/... */}
+                  {showDashboardButton && (
+                    <Link
+                      href='/admin'
+                      onClick={() => setIsOpen(false)}
+                      className={`p-3 rounded-md transition duration-150 flex items-center bg-green-600/70 hover:bg-green-500/80 text-white font-bold`}
+                    >
+                      <LayoutDashboard size={20} className='mr-2' />
+                      Ir al Dashboard
+                    </Link>
+                  )}
+
+                  {/* Links de navegación del admin (visibles aunque ya esté en el dashboard) */}
                   {adminNavItems.map((item) => (
                     <Link
                       key={item.name}
@@ -272,7 +284,7 @@ export default function Navbar({
                 </>
               )}
 
-              {/* BOTÓN CERRAR SESIÓN (MÓVIL) */}
+              {/* BOTÓN CERRAR SESIÓN (Móvil) - Se muestra si eres admin */}
               {isAdmin && onLogoutClick && (
                 <button
                   onClick={() => {
@@ -293,7 +305,7 @@ export default function Navbar({
                 </button>
               )}
 
-              {/* Categorías Móvil - Usa isHomePage para control de visibilidad */}
+              {/* Categorías (Menú) */}
               {(!isHomePage || isAdmin) && (
                 <>
                   <h4
@@ -305,7 +317,6 @@ export default function Navbar({
                     Categorías
                   </h4>
 
-                  {/* Enlaces de Categorías */}
                   {CATEGORIAS.map((cat) => (
                     <Link
                       key={cat.slug}
