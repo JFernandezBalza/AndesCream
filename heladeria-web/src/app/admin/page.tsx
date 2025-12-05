@@ -127,8 +127,7 @@ export default function AdminPage() {
           </h1>
 
           <p className='text-lg text-justify font-sans text-gray-700 max-w-4xl mb-10 mt-4'>
-            Bienvenido al centro de gestión de AndesCream. Selecciona una tarea
-            para comenzar.
+            Bienvenido al centro de gestión de AndesCream🍦
           </p>
 
           {/* Cita Motivacional Diaria (NUEVA CARACTERÍSTICA) */}
