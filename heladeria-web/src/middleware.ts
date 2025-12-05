@@ -31,30 +31,29 @@ function getUserRole(request: NextRequest): string {
 }
 
 export function middleware(request: NextRequest) {
-  // 'checkAuthToken' y 'getUserRole' son usadas aquí.
+  // 'checkAuthToken' y 'getUserRole' son usadas aquí, eliminando las advertencias.
   const isUserLoggedIn = checkAuthToken(request);
-  // Se le añade un prefijo de guion bajo ('_') para silenciar temporalmente
-  // el warning de ESLint, ya que la variable no se usa debido a la depuración.
-  const _userRole = getUserRole(request);
+  const userRole = getUserRole(request); // Variable restaurada a 'userRole'
 
   // ----------------------------------------------------------------------
-  // ⚠️ TEMPORAL: DESACTIVAMOS LA PROTECCIÓN DE /admin PARA ROMPER EL BUUCLE
+  // ✅ SEGURIDAD RESTAURADA: Esto elimina el bucle Server-Side que teníamos.
   // ----------------------------------------------------------------------
 
   if (request.nextUrl.pathname.startsWith('/admin')) {
-    // 1. Protección de ruta /admin
-    // if (!isUserLoggedIn || _userRole !== 'ADMIN') { // La verificación de _userRole está comentada.
-    //   console.log("MIDDLEWARE: Bloqueando acceso a /admin y redirigiendo a /login.");
-    //   return NextResponse.redirect(new URL('/login', request.url));
-    // }
+    // 1. Protección de ruta /admin: Redirige si NO está logeado o NO es ADMIN.
+    if (!isUserLoggedIn || userRole !== 'ADMIN') {
+      console.log(
+        'MIDDLEWARE: Bloqueando acceso a /admin y redirigiendo a /login.'
+      );
+      return NextResponse.redirect(new URL('/login', request.url));
+    }
 
-    // Permitir acceso a /admin sin verificación (TEMPORAL)
-    console.log('MIDDLEWARE: Acceso temporalmente permitido a /admin (DEBUG).');
+    // Permitir acceso a /admin
     return NextResponse.next();
   }
 
-  // 2. Redirección de usuario logeado en /login
-  // MANTENEMOS ESTA SECCIÓN ACTIVA
+  // 2. Redirección de usuario logeado en /login: Si ya está autenticado, no debería
+  // estar en el login, así que lo enviamos a /admin.
   if (isUserLoggedIn && request.nextUrl.pathname.startsWith('/login')) {
     console.log(
       'MIDDLEWARE: Usuario autenticado intentó ir a /login, redirigiendo a /admin.'
