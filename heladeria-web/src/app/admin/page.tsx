@@ -1,14 +1,9 @@
-// app/admin/page.tsx (CORREGIDO - Aliniado con RootLayout)
-
 'use client';
 
 import { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-// IMPORTAMOS EL COMPONENTE DE MOTIVACIÓN
 import DailyMotivationCard from '@/components/DailyMotivationCard';
-
-// Importamos los iconos de lucide-react para las tarjetas y la carga
 import {
   Settings,
   Package,
@@ -88,7 +83,6 @@ const ActionCard: React.FC<ActionCardProps> = ({
 
 export default function AdminPage() {
   const router = useRouter();
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
   // --- LÓGICA DE CIERRE DE SESIÓN ---
@@ -105,33 +99,22 @@ export default function AdminPage() {
   // --- LÓGICA DE PROTECCIÓN DE RUTA (GUARDIA) ---
   useEffect(() => {
     // Lee el indicador de autenticación.
-    const adminFlag = localStorage.getItem('is_admin_authenticated');
-
-    if (adminFlag === 'true') {
-      setIsAuthenticated(true);
-    } else {
-      // Redirigimos si no está autenticado
-      console.warn('Acceso denegado. Redirigiendo a /login.');
-      setTimeout(() => {
-        router.push('/login');
-      }, 50);
-    }
-    // Finalizamos la carga
     setIsLoading(false);
-  }, [router]);
 
-  // 1. Mostrar pantalla de carga/verificación (Este estado debe permanecer igual)
-  if (isLoading || !isAuthenticated) {
-    return (
-      <div className='min-h-screen flex flex-col items-center justify-center bg-gray-100 p-8'>
-        <div className='animate-spin rounded-full h-12 w-12 border-b-4 border-pink-500 mb-4'></div>
-        <p className='text-xl text-gray-700 font-serif flex items-center'>
-          <LayoutDashboard className='w-5 h-5 mr-2' />
-          Verificando acceso al panel...
-        </p>
-      </div>
-    );
-  }
+    }, []);
+
+
+    if (isLoading) {
+      return (
+        <div className='min-h-screen flex flex-col items-center justify-center bg-gray-100 p-8'>
+          <div className='animate-spin rounded-full h-12 w-12 border-b-4 border-pink-500 mb-4'></div>
+          <p className='text-xl text-gray-700 font-serif flex items-center'>
+            <LayoutDashboard className='w-5 h-5 mr-2' />
+            Cargando panel de administración...
+          </p>
+        </div>
+      );
+    }
 
   // 2. Mostrar Dashboard si está autenticado (APLICAMOS EL ENVOLTORIO UNIFICADO)
   return (
